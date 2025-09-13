@@ -1,56 +1,17 @@
-import { Link } from "@heroui/link";
-import { Snippet } from "@heroui/snippet";
-import { Code } from "@heroui/code";
-import { button as buttonStyles } from "@heroui/theme";
 
-import { siteConfig } from "@/config/site";
-import { title, subtitle } from "@/components/primitives";
-import { GithubIcon } from "@/components/icons";
+import DashboardButton from "@/components/dashboard-button";
 
 export default function Home() {
   return (
+    <>
+    
     <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
-      <div className="inline-block max-w-xl text-center justify-center">
-        <span className={title()}>Make&nbsp;</span>
-        <span className={title({ color: "violet" })}>beautiful&nbsp;</span>
-        <br />
-        <span className={title()}>
-          websites regardless of your design experience.
-        </span>
-        <div className={subtitle({ class: "mt-4" })}>
-          Beautiful, fast and modern React UI library.
-        </div>
-      </div>
-
-      <div className="flex gap-3">
-        <Link
-          isExternal
-          className={buttonStyles({
-            color: "primary",
-            radius: "full",
-            variant: "shadow",
-          })}
-          href={siteConfig.links.docs}
-        >
-          Documentation
-        </Link>
-        <Link
-          isExternal
-          className={buttonStyles({ variant: "bordered", radius: "full" })}
-          href={siteConfig.links.github}
-        >
-          <GithubIcon size={20} />
-          GitHub
-        </Link>
-      </div>
-
-      <div className="mt-8">
-        <Snippet hideCopyButton hideSymbol variant="bordered">
-          <span>
-            Get started by editing <Code color="primary">app/page.tsx</Code>
-          </span>
-        </Snippet>
+      <div className="flex flex-col justify-center gap-4 mt-10 sm:max-w-[400px] mx-auto">
+      <DashboardButton label="Band Schedule" url="https://docs.google.com/spreadsheets/u/0/d/1naOVRBDOi6G_Amtr8U06ITkPpGE9vQC9/htmlview#" isExternal={true} />
+      <DashboardButton label="GregMox" url="https://gregmox.c-syncapp.com" isExternal={true} />
+      <DashboardButton label="PiHole" url="http://10.24.24.25/admin/login" isExternal={true} />
       </div>
     </section>
+    </>
   );
 }
