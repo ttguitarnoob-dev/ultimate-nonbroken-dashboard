@@ -10,6 +10,7 @@ export default function Home() {
       <DashboardButton label="Band Schedule" url="https://docs.google.com/spreadsheets/u/0/d/1naOVRBDOi6G_Amtr8U06ITkPpGE9vQC9/htmlview#" isExternal={true} />
       <DashboardButton label="GregMox" url="https://gregmox.c-syncapp.com" isExternal={true} />
       <DashboardButton label="PiHole" url="http://10.24.24.25/admin/login" isExternal={true} />
+      <DashboardButton label="Tube Search" url="/tube-search" isExternal={false} />
       </div>
     </section>
     </>

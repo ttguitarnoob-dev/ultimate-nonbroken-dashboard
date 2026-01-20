@@ -1,4 +1,5 @@
 "use server"
+import { prisma } from "./db";
 
 //CREATE CARRY ITEM
 
@@ -27,7 +28,7 @@ export async function createCarryItem({
 import { revalidatePath } from "next/cache";
 //GET CARRY ITEMS
 
-import { prisma } from "./db";
+
 
 export async function GetCarryItems() {
 
@@ -46,4 +47,125 @@ export async function GetCarryItems() {
       } finally {
         await prisma.$disconnect();
       }
+}
+
+// FETCH HAZELTUBE LIST
+
+export async function getHazelTube() {
+  try {
+    const queue = await prisma.hazelTube.findUnique({
+      where: { id: 1 },
+    });
+
+    if (!queue) {
+      return null; // or throw new Error("Queue not found");
+    }
+
+    return queue;
+  } catch (error) {
+    console.error("Error fetching video queue:", error);
+    throw error; // let the caller handle it
+  }
+}
+
+//ADD VIDEO TO HAZELTUBE LIST
+
+export async function addToHazelTube(videoId: string) {
+  if (!videoId) throw new Error("videoId is required");
+
+  try {
+    // Fetch current array
+    const queue = await prisma.hazelTube.findUnique({
+      where: { id: 1 },
+    });
+
+    if (!queue) {
+      throw new Error("Video queue not found");
+    }
+
+    // Prevent duplicates
+    if (queue.videoIds.includes(videoId)) {
+      return queue; // already in the array
+    }
+
+    // Append new ID
+    const updatedQueue = await prisma.hazelTube.update({
+      where: { id: 1 },
+      data: {
+        videoIds: [...queue.videoIds, videoId],
+      },
+    });
+
+    return updatedQueue;
+  } catch (error) {
+    console.error("Failed to add video to queue:", error);
+    throw error;
+  }
+}
+
+// REMOVE AN ITEM FROM HAZELTUBE LIST
+
+export async function removeFromHazelTube(videoId: string) {
+  if (!videoId) throw new Error("videoId is required");
+
+  try {
+    // Fetch current queue
+    const queue = await prisma.hazelTube.findUnique({
+      where: { id: 1 },
+    });
+
+    if (!queue) {
+      throw new Error("Video queue not found");
+    }
+
+    // Remove the ID from the array
+    const updatedVideoIds = queue.videoIds.filter((id) => id !== videoId);
+
+    // Update the row
+    const updatedQueue = await prisma.hazelTube.update({
+      where: { id: 1 },
+      data: {
+        videoIds: updatedVideoIds,
+      },
+    });
+
+    return updatedQueue;
+  } catch (error) {
+    console.error("Failed to remove video from queue:", error);
+    throw error;
+  }
+}
+
+// DOWNLOAD ONE VIDEO
+export interface DownloadApiResponse {
+  message: string;
+  url: string;
+  bitrate: string;
+  resolution: string;
+}
+
+export async function downloadHazelTube(url: string): Promise<string> {
+  try {
+    const response = await fetch("https://nogogglevids.kitty-cottage.com/hazeltube", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        url
+      }),
+    });
+
+    if (!response.ok) {
+      // HTTP-level error
+      return `HTTP error: ${response.status} ${response.statusText}`;
+    }
+
+    const data: DownloadApiResponse = await response.json();
+    console.log("API MESSAGE!", data.message)
+    return data.message;
+  } catch (error) {
+    // Network or unexpected error
+    return (error instanceof Error) ? error.message : String(error);
+  }
 }
