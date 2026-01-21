@@ -21,7 +21,7 @@ export default function YouTubeSearch() {
   const [loading, setLoading] = useState(false);
   const [resolutionMap, setResolutionMap] = useState<Record<string, string>>({});
 
-  const YOUTUBE_API_KEY = "POOHOLE";
+  const YOUTUBE_API_KEY = "pooass";
 
   async function searchYouTube() {
     if (!query.trim()) return;

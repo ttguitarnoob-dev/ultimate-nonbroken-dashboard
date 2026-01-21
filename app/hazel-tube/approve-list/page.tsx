@@ -15,7 +15,7 @@ type VideoData = {
 export default function VideoQueuePlaylist() {
   const [videos, setVideos] = useState<VideoData[]>([]);
   const [loading, setLoading] = useState(false);
-  const APIKey = "POOASS";
+  const APIKey = "Pooass";
 
   function decodeHtml(html: string) {
     const txt = document.createElement("textarea");
@@ -87,47 +87,51 @@ export default function VideoQueuePlaylist() {
   return (
     <div className="flex flex-col gap-4 w-full max-w-4xl">
       {videos.map((video) => (
-        <Card key={video.videoId}>
-          <CardBody className="flex flex-row gap-4">
-            <Image
-              src={video.thumbnail}
-              alt={video.title}
-              width={300}
-              radius="sm"
-            />
-            <div className="flex flex-col flex-1 justify-between w-full">
-              {/* Title at the top */}
-              <p className="font-semibold">{decodeHtml(video.title)}</p>
-
-              {/* Buttons at the bottom */}
-              <div className="flex gap-2 justify-end">
-                <Button
-                  color="primary"
-                  variant="flat"
-                  onPress={() => openVideo(video.videoId)}
-                >
-                  Open on YouTube
-                </Button>
-
-                <Button
-                  color="success"
-                  variant="flat"
-                  onPress={() => callHazelTubeDownload(video.videoId)}
-                >
-                  Approve
-                </Button>
-
-                <Button
-                  color="danger"
-                  variant="flat"
-                  onPress={() => handleRemove(video.videoId)}
-                >
-                  Deny
-                </Button>
-              </div>
+        <Card className="backdrop-blur-lg bg-black/20 dark:bg-white/5" key={video.videoId}>
+        <CardBody className="flex flex-col gap-4">
+          {/* Thumbnail at the top */}
+          <Image
+            src={video.thumbnail}
+            alt={video.title}
+            width={500}
+            radius="sm"
+            className="self-center" // optional: center the image horizontally
+          />
+      
+          {/* Content stacked vertically */}
+          <div className="flex flex-col flex-1">
+            {/* Title at the top */}
+            <p className="font-semibold mb-2">{decodeHtml(video.title)}</p>
+      
+            {/* Buttons stay horizontal at the bottom */}
+            <div className="flex gap-2 justify-end mt-auto">
+              <Button
+                color="primary"
+                variant="flat"
+                onPress={() => openVideo(video.videoId)}
+              >
+                Open on YouTube
+              </Button>
+      
+              <Button
+                color="success"
+                variant="flat"
+                onPress={() => callHazelTubeDownload(video.videoId)}
+              >
+                Approve
+              </Button>
+      
+              <Button
+                color="danger"
+                variant="flat"
+                onPress={() => handleRemove(video.videoId)}
+              >
+                Deny
+              </Button>
             </div>
-          </CardBody>
-        </Card>
+          </div>
+        </CardBody>
+      </Card>
       ))}
     </div>
   );

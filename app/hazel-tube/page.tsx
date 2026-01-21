@@ -19,7 +19,7 @@ export default function YouTubeSearchAddQueue() {
   const [loading, setLoading] = useState(false);
   const [addingId, setAddingId] = useState<string | null>(null);
 
-  const YOUTUBE_API_KEY = "POOASS"
+  const YOUTUBE_API_KEY = "pooass"
 
   function decodeHtml(html: string) {
     const txt = document.createElement("textarea");
