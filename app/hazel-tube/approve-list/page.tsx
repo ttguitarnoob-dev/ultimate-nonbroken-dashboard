@@ -15,8 +15,9 @@ type VideoData = {
 export default function VideoQueuePlaylist() {
   const [videos, setVideos] = useState<VideoData[]>([]);
   const [loading, setLoading] = useState(false);
-  const APIKey = "Pooass";
+  const APIKey = process.env.NEXT_PUBLIC_YOUTUBE_API_KEY;
 
+  
   function decodeHtml(html: string) {
     const txt = document.createElement("textarea");
     txt.innerHTML = html;

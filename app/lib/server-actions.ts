@@ -169,3 +169,32 @@ export async function downloadHazelTube(url: string): Promise<string> {
     return (error instanceof Error) ? error.message : String(error);
   }
 }
+
+// Download my videos
+
+export async function downloadMyVid(url: string, resolution: string): Promise<string> {
+  try {
+    const response = await fetch("https://nogogglevids.kitty-cottage.com/download", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        url,
+        resolution
+      }),
+    });
+
+    if (!response.ok) {
+      // HTTP-level error
+      return `HTTP error: ${response.status} ${response.statusText}`;
+    }
+
+    const data: DownloadApiResponse = await response.json();
+    console.log("API MESSAGE!", data.message)
+    return data.message;
+  } catch (error) {
+    // Network or unexpected error
+    return (error instanceof Error) ? error.message : String(error);
+  }
+}
