@@ -6,22 +6,36 @@ import { prisma } from "./db";
 export async function createCarryItem({
   name,
   item,
+  imageURL,
 }: {
   name: string;
   item: string;
+  imageURL?: string;
 }) {
   try {
+    console.log("SWARTING ", name, item, imageURL)
+    
+
+   
+    
+
+
+    // Create the CarryItem in Prisma
     const newCarryItem = await prisma.carryItem.create({
       data: {
         name,
         item,
+        imageURL, // save the uploaded image URL
       },
     });
-    revalidatePath("/carry-list")
+
+    // Revalidate the page
+    revalidatePath("/carry-list");
+
     return newCarryItem;
   } catch (error) {
-    console.error('Error creating CarryItem:', error);
-    throw new Error('Failed to create CarryItem');
+    console.error("Error creating CarryItem:", error);
+    throw new Error("Failed to create CarryItem");
   }
 }
 
