@@ -12,10 +12,10 @@ interface PageProps {
 }
 
 // Server Component for dynamic route /carry/[id]
-export default async function CarriedItemPage({ params }: PageProps) {
-  const id = params.id
-  console.log("IDIDID", id)
-  const item = await GetCarryItem(params.id)
+export default async function CarriedItemPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+
+  const item = await GetCarryItem(id)
 
   return (
     <section className="flex flex-col gap-4">
