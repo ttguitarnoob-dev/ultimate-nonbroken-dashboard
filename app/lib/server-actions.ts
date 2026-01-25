@@ -40,10 +40,27 @@ export async function createCarryItem({
 }
 
 import { revalidatePath } from "next/cache";
+
+// GET ONE CARRY ITEM
+export async function GetCarryItem(carryItemId: string) {
+  if (!carryItemId) {
+    throw new Error("carryItemId is required")
+  }
+
+  const carryItem = await prisma.carryItem.findUnique({
+    where: {
+      id: carryItemId,
+    },
+  })
+
+  if (!carryItem) {
+    throw new Error("CarryItem not found")
+  }
+
+  return carryItem
+}
+
 //GET CARRY ITEMS
-
-
-
 export async function GetCarryItems() {
 
     try {

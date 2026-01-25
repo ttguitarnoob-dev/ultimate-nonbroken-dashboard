@@ -1,6 +1,7 @@
 "use client"
 
 import { Image } from "@heroui/image";
+import { Link } from "@heroui/link";
 import {
   Table,
   TableBody,
@@ -40,11 +41,14 @@ export default function CarryList({ items }: { items: Item[] }) {
                 return (
                   <TableCell>
                     {row.imageURL ? (
-                      <Image
-                        src={row.imageURL}
-                        alt={row.item}
-                        className="w-12 h-12 object-cover rounded"
-                      />
+                      <Link href={`/carry-list/${row.id}`} >
+                        <Image
+                          src={row.imageURL}
+                          alt={row.item}
+                          className="w-12 h-12 object-cover rounded"
+                        />
+                      </Link>
+
                     ) : (
                       "—"
                     )}
