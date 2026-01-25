@@ -21,7 +21,7 @@ export default async function CarriedItemPage({ params }: { params: Promise<{ id
     <section className="flex flex-col gap-4">
       <h2 className="text-2xl">{item.item}</h2>
       <p>Carrier: {item.name}</p>
-      {item.imageURL && (
+      {item.imageURL && ( //it's fine bro
         <Image
           src={item.imageURL}
           alt={item.item}
