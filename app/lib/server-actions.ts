@@ -84,31 +84,40 @@ export async function GetCarryItems() {
 
 export async function getHazelTube() {
   try {
-    const queue = await prisma.hazelTube.findUnique({
-      where: { id: 1 },
+    const queues = await prisma.hazelTube.findMany({
+      where: {
+        id: { in: [1, 2] },
+      },
     });
 
-    if (!queue) {
-      return null; // or throw new Error("Queue not found");
-    }
+    const byId = Object.fromEntries(
+      queues.map(q => [q.id, q])
+    );
 
-    return queue;
+    return {
+      video: byId[1] ?? null,
+      audio: byId[2] ?? null,
+    };
   } catch (error) {
-    console.error("Error fetching video queue:", error);
-    throw error; // let the caller handle it
+    console.error("Error fetching video queues:", error);
+    throw error;
   }
 }
 
+
 //ADD VIDEO TO HAZELTUBE LIST
 
-export async function addToHazelTube(videoId: string) {
+export async function addToHazelTube(videoId: string, isAudio: boolean) {
   if (!videoId) throw new Error("videoId is required");
 
   try {
     // Fetch current array
     const queue = await prisma.hazelTube.findUnique({
-      where: { id: 1 },
+      where: {
+        id: isAudio ? 2 : 1,
+      },
     });
+    
 
     if (!queue) {
       throw new Error("Video queue not found");
@@ -121,11 +130,14 @@ export async function addToHazelTube(videoId: string) {
 
     // Append new ID
     const updatedQueue = await prisma.hazelTube.update({
-      where: { id: 1 },
+      where: {
+        id: isAudio ? 2 : 1,
+      },
       data: {
         videoIds: [...queue.videoIds, videoId],
       },
     });
+    
 
     return updatedQueue;
   } catch (error) {
@@ -136,13 +148,15 @@ export async function addToHazelTube(videoId: string) {
 
 // REMOVE AN ITEM FROM HAZELTUBE LIST
 
-export async function removeFromHazelTube(videoId: string) {
+export async function removeFromHazelTube(videoId: string, isAudio: boolean) {
   if (!videoId) throw new Error("videoId is required");
 
   try {
     // Fetch current queue
     const queue = await prisma.hazelTube.findUnique({
-      where: { id: 1 },
+      where: {
+        id: isAudio ? 2 : 1,
+      },
     });
 
     if (!queue) {
@@ -154,7 +168,9 @@ export async function removeFromHazelTube(videoId: string) {
 
     // Update the row
     const updatedQueue = await prisma.hazelTube.update({
-      where: { id: 1 },
+      where: {
+        id: isAudio ? 2 : 1,
+      },
       data: {
         videoIds: updatedVideoIds,
       },
@@ -175,9 +191,11 @@ export interface DownloadApiResponse {
   resolution: string;
 }
 
-export async function downloadHazelTube(url: string): Promise<string> {
+export async function downloadHazelTube(url: string, isAudio: boolean): Promise<string> {
+  const endpoint = isAudio ? "https://nogogglevids.kitty-cottage.com/audio" : "https://nogogglevids.kitty-cottage.com/hazeltube";
+
   try {
-    const response = await fetch("https://nogogglevids.kitty-cottage.com/hazeltube", {
+    const response = await fetch(endpoint, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -6,6 +6,7 @@ import { Input } from "@heroui/input";
 import { Button } from "@heroui/button";
 import { Card, CardBody } from "@heroui/card";
 import { Image } from "@heroui/image";
+import {Switch} from "@heroui/switch";
 
 type VideoResult = {
   videoId: string;
@@ -18,6 +19,7 @@ export default function YouTubeSearchAddQueue() {
   const [results, setResults] = useState<VideoResult[]>([]);
   const [loading, setLoading] = useState(false);
   const [addingId, setAddingId] = useState<string | null>(null);
+  const [isAudio, setIsAudio] = useState(false)
 
   const YOUTUBE_API_KEY = process.env.NEXT_PUBLIC_YOUTUBE_API_KEY
 
@@ -56,10 +58,10 @@ export default function YouTubeSearchAddQueue() {
   }
 
   // Add video to queue
-  async function handleAdd(videoId: string) {
+  async function handleAdd(videoId: string, isAudio: boolean) {
     setAddingId(videoId);
     try {
-      await addToHazelTube(videoId);
+      await addToHazelTube(videoId, isAudio);
       // Optional: you could show a toast/feedback
       console.log("Added to queue:", videoId);
     } catch (err) {
@@ -71,6 +73,7 @@ export default function YouTubeSearchAddQueue() {
 
   return (
     <div className="flex flex-col gap-6 w-full max-w-7xl">
+      <p>Search for a video. Switch the Audio Only switch if you want to only download the audio.</p>
   {/* Search input */}
   <div className="flex justify-center gap-2 w-full max-w-7xl">
     <Input
@@ -88,8 +91,11 @@ export default function YouTubeSearchAddQueue() {
     >
       Search
     </Button>
+    <Switch isSelected={isAudio} onValueChange={setIsAudio}>
+        Audio Only
+      </Switch>
   </div>
-
+ 
   {/* Results */}
   <div className="flex flex-col gap-6">
     {results.map((video) => (
@@ -109,10 +115,10 @@ export default function YouTubeSearchAddQueue() {
               color="success"
               variant="flat"
               className="max-w-xs mx-auto"
-              onPress={() => handleAdd(video.videoId)}
+              onPress={() => handleAdd(video.videoId, isAudio)}
               isLoading={addingId === video.videoId}
             >
-              Request This Video
+              {isAudio ? "Request This Audio" : "Request This Video"}
             </Button>
           </div>
         </CardBody>
