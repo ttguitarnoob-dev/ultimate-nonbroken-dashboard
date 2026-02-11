@@ -3,6 +3,7 @@ import { fetchHazelSearch } from "../lib/server-actions";
 
 export default async function HazelSearchPage() {
   const results = await fetchHazelSearch();
+  console.log("OMGWUTISIT", results)
 
   // Helper function to check for inappropriate terms
   const containsInappropriateTerm = (query: string) => {

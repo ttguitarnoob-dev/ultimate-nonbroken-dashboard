@@ -106,14 +106,14 @@ export async function getHazelTube() {
 
 // FETCH ALL HAZELSEARCH
 export async function fetchHazelSearch() {
-  console.log("SERACING THESERDH")
   try {
     const searches = await prisma.hazelSearch.findMany({
       orderBy: {
         createdAt: "desc", // optional, remove if you don't have this field
       },
     });
-
+    
+    console.log("SERACING THESERDH", searches)
     return {
       success: true,
       data: searches,
