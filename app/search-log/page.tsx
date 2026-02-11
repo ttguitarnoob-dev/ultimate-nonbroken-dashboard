@@ -38,7 +38,7 @@ export default async function HazelSearchPage() {
           return (
             <li
               key={search.id}
-              className="p-4  w-full flex flex-col backdrop-blur-lg bg-black/20 dark:bg-white/10"
+              className="p-4 rounded-lg w-full flex flex-col backdrop-blur-lg bg-black/20 dark:bg-white/10"
             >
               {/* Query + optional flag */}
               <div className="flex items-center justify-between w-full">
