@@ -106,6 +106,7 @@ export async function getHazelTube() {
 
 // FETCH ALL HAZELSEARCH
 export async function fetchHazelSearch() {
+  console.log("SERACING THESERDH")
   try {
     const searches = await prisma.hazelSearch.findMany({
       orderBy: {
@@ -131,6 +132,8 @@ export async function fetchHazelSearch() {
  
 // LOG HAZELSEARCH
 export async function logHazelSearch(query: string) {
+
+  console.log("SHESERCH", query)
   try {
     if (!query || query.trim().length === 0) {
       throw new Error("Query is required")

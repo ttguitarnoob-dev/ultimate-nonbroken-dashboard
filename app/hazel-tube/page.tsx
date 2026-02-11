@@ -15,141 +15,7 @@ type VideoResult = {
   thumbnail: string;
 };
 
-// const inappropriateSearchTerms = [
-//   // Sexual content
-//   "porn",
-//   "porno",
-//   "pornography",
-//   "xxx",
-//   "sex",
-//   "sexy",
-//   "nude",
-//   "nudity",
-//   "naked",
-//   "boobs",
-//   "breasts",
-//   "butt",
-//   "booty",
-//   "penis",
-//   "vagina",
-//   "genitals",
-//   "fetish",
-//   "kinky",
-//   "bdsm",
-//   "hardcore",
-//   "softcore",
-//   "strip",
-//   "stripper",
-//   "stripclub",
-//   "twerk",
-//   "onlyfans",
-//   "camgirl",
-//   "cams",
-//   "escort",
-//   "hookup",
-//   "dating",
-//   "nsfw",
-//   "leaked",
-//   "explicit",
-//   "erotic",
-//   "hentai",
-//   "rule34",
 
-//   // Violence & gore
-//   "gore",
-//   "bloody",
-//   "bloodshed",
-//   "beheading",
-//   "decapitation",
-//   "murder",
-//   "killing",
-//   "execution",
-//   "shooting",
-//   "stabbing",
-//   "torture",
-//   "slaughter",
-//   "massacre",
-//   "fight",
-//   "brawl",
-//   "brutal",
-//   "graphic",
-//   "injury",
-//   "deadbody",
-//   "corpse",
-//   "autopsy",
-//   "war",
-//   "combat",
-//   "terrorist",
-//   "explosion",
-
-//   // Self-harm
-//   "suicide",
-//   "selfharm",
-//   "cutting",
-//   "overdose",
-//   "hang",
-//   "poison",
-//   "depression",
-//   "anorexia",
-//   "bulimia",
-
-//   // Drugs & substances
-//   "drugs",
-//   "weed",
-//   "marijuana",
-//   "cocaine",
-//   "heroin",
-//   "meth",
-//   "lsd",
-//   "acid",
-//   "ecstasy",
-//   "mdma",
-//   "vape",
-//   "vaping",
-//   "smoking",
-//   "cigarettes",
-//   "alcohol",
-//   "vodka",
-//   "beer",
-//   "whiskey",
-//   "drunk",
-//   "intoxicated",
-
-//   // Crime & illegal activity
-//   "shoplift",
-//   "steal",
-//   "hacking",
-//   "hack",
-//   "fraud",
-//   "scam",
-//   "counterfeit",
-//   "piracy",
-//   "weapon",
-//   "gun",
-//   "knife",
-//   "bomb",
-//   "ammo",
-//   "arson",
-//   "kidnap",
-
-//   // Hate & extremism
-//   "racist",
-//   "nazi",
-//   "kkk",
-//   "extremist",
-//   "supremacy",
-//   "terrorism",
-
-//   // Gambling
-//   "gambling",
-//   "casino",
-//   "betting",
-//   "lottery",
-//   "slots",
-//   "blackjack",
-//   "roulette",
-//   "poker"
-// ];
 
 
 export default function YouTubeSearchAddQueue() {
@@ -170,6 +36,7 @@ export default function YouTubeSearchAddQueue() {
 
   // Search YouTube
   async function searchYouTube() {
+    console.log("SEARCHQUR")
     logHazelSearch(query)
 
     const lowerQuery = query.toLowerCase();
