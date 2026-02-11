@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { inappropriateSearchTerms } from "../lib/helpers";
 import { fetchHazelSearch } from "../lib/server-actions";
 
