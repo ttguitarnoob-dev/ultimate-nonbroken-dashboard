@@ -27,3 +27,9 @@ model HazelTube {
   id       Int      @id @default(autoincrement())
   videoIds String[]
 }
+
+model HazelSearch {
+  id        Int      @id @default(autoincrement())
+  query     String
+  createdAt DateTime @default(now())
+}

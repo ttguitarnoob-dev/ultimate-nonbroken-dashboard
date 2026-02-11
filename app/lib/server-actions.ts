@@ -104,6 +104,54 @@ export async function getHazelTube() {
   }
 }
 
+// FETCH ALL HAZELSEARCH
+export async function fetchHazelSearch() {
+  try {
+    const searches = await prisma.hazelSearch.findMany({
+      orderBy: {
+        createdAt: "desc", // optional, remove if you don't have this field
+      },
+    });
+
+    return {
+      success: true,
+      data: searches,
+    };
+  } catch (error) {
+    console.error("Error fetching HazelSearch records:", error);
+
+    return {
+      success: false,
+      data: [],
+      error: "Failed to fetch HazelSearch records.",
+    };
+  }
+}
+
+ 
+// LOG HAZELSEARCH
+export async function logHazelSearch(query: string) {
+  try {
+    if (!query || query.trim().length === 0) {
+      throw new Error("Query is required")
+    }
+
+    const search = await prisma.hazelSearch.create({
+      data: {
+        query: query.trim(),
+      },
+    })
+
+    return search
+  } catch (error) {
+    console.error("Failed to log Hazel search:", error)
+
+    // Optional: rethrow if you want upstream handling
+    throw new Error("Unable to log search")
+  }
+}
+
+
 
 //ADD VIDEO TO HAZELTUBE LIST
 
