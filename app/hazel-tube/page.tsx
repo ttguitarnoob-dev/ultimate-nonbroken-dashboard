@@ -13,7 +13,11 @@ type VideoResult = {
   videoId: string;
   title: string;
   thumbnail: string;
+  channel: string;
+  uploadDate: string; // ISO date string from YouTube
+  duration: string;   // formatted like "12:34" or "1:02:45"
 };
+
 
 
 
@@ -36,8 +40,8 @@ export default function YouTubeSearchAddQueue() {
 
   // Search YouTube
   async function searchYouTube() {
-    console.log("SEARCHQUR")
-    logHazelSearch(query)
+    console.log("SEARCHQUR");
+    logHazelSearch(query);
 
     const lowerQuery = query.toLowerCase();
 
@@ -47,29 +51,59 @@ export default function YouTubeSearchAddQueue() {
       )
     ) {
       setErrorMessage("Why are you searching for that??");
-      return
+      return;
     }
 
-    setErrorMessage("")
-
-
+    setErrorMessage("");
 
     if (!query.trim()) return;
     setLoading(true);
 
     try {
-      const res = await fetch(
+      // 1️⃣ SEARCH CALL
+      const searchRes = await fetch(
         `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=10&q=${encodeURIComponent(
           query
         )}&key=${YOUTUBE_API_KEY}`
       );
 
-      const data = await res.json();
+      const searchData = await searchRes.json();
 
-      const videos: VideoResult[] = data.items.map((item: any) => ({
-        videoId: item.id.videoId,
+      const videoIds = searchData.items
+        .map((item: any) => item.id.videoId)
+        .join(",");
+
+      // 2️⃣ FETCH VIDEO DETAILS (for duration)
+      const detailsRes = await fetch(
+        `https://www.googleapis.com/youtube/v3/videos?part=contentDetails,snippet&id=${videoIds}&key=${YOUTUBE_API_KEY}`
+      );
+
+      const detailsData = await detailsRes.json();
+
+      // Helper to format ISO 8601 duration
+      const formatDuration = (duration: string) => {
+        const match = duration.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
+        const hours = parseInt(match?.[1] || "0");
+        const minutes = parseInt(match?.[2] || "0");
+        const seconds = parseInt(match?.[3] || "0");
+
+        if (hours > 0) {
+          return `${hours}:${minutes.toString().padStart(2, "0")}:${seconds
+            .toString()
+            .padStart(2, "0")}`;
+        }
+
+        return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+      };
+
+
+      const videos: VideoResult[] = detailsData.items.map((item: any) => ({
+        videoId: item.id,
         title: item.snippet.title,
         thumbnail: item.snippet.thumbnails.medium.url,
+        channel: item.snippet.channelTitle,
+        uploadDate: formatUploadDate(item.snippet.publishedAt),
+        duration: formatDuration(item.contentDetails.duration)
       }));
 
       setResults(videos);
@@ -80,21 +114,32 @@ export default function YouTubeSearchAddQueue() {
     }
   }
 
+  const formatUploadDate = (isoDate: string): string => {
+    const date = new Date(isoDate);
+
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
+    const year = date.getFullYear();
+
+    return `${month}/${day}/${year}`;
+  };
+
+
   // Add video to queue
   // Add video to queue
-async function handleAdd(videoId: string, isAudio: boolean) {
-  setAddingId(videoId);
-  try {
-    await addToHazelTube(videoId, isAudio);
-    // Remove the added video from search results
-    setResults((prev) => prev.filter((video) => video.videoId !== videoId));
-    console.log("Added to queue and removed from search results:", videoId);
-  } catch (err) {
-    console.error("Failed to add to queue:", err);
-  } finally {
-    setAddingId(null);
+  async function handleAdd(videoId: string, isAudio: boolean) {
+    setAddingId(videoId);
+    try {
+      await addToHazelTube(videoId, isAudio);
+      // Remove the added video from search results
+      setResults((prev) => prev.filter((video) => video.videoId !== videoId));
+      console.log("Added to queue and removed from search results:", videoId);
+    } catch (err) {
+      console.error("Failed to add to queue:", err);
+    } finally {
+      setAddingId(null);
+    }
   }
-}
 
 
   return (
@@ -131,26 +176,52 @@ async function handleAdd(videoId: string, isAudio: boolean) {
         {results.map((video) => (
           <Card key={video.videoId}>
             <CardBody className="flex flex-row gap-4">
-              <Image
-                src={video.thumbnail}
-                alt={video.title}
-                width={300}
-                radius="sm"
-              />
+              <div className="relative w-[300px]">
+                <Image
+                  src={video.thumbnail}
+                  alt={video.title}
+                  width={300}
+                  radius="sm"
+                  className="object-cover"
+                />
 
-              <div className="flex flex-col flex-1 justify-between w-full">
-                <p className="font-semibold">{decodeHtml(video.title)}</p>
+                {/* Duration Overlay */}
+                <div className="absolute bottom-2 right-2 z-10 backdrop-blur-sm bg-black/40 text-white text-xs px-2 py-1 rounded">
+                  {video.duration}
+                </div>
+              </div>
 
+
+              <div className="flex flex-col flex-1 w-full justify-between">
+
+                {/* Text Container */}
+                <div className="flex flex-col gap-1">
+                  <p className="font-semibold line-clamp-2">
+                    {decodeHtml(video.title)}
+                  </p>
+
+                  <p className="text-sm text-default-600">
+                    {video.channel}
+                  </p>
+
+                  <p className="text-xs text-default-400">
+                    {video.uploadDate}
+                  </p>
+                </div>
+
+                {/* Button */}
                 <Button
                   color="success"
                   variant="flat"
-                  className="max-w-xs mx-auto"
+                  className="max-w-xs mx-auto mt-4"
                   onPress={() => handleAdd(video.videoId, isAudio)}
                   isLoading={addingId === video.videoId}
                 >
                   {isAudio ? "Request This Audio" : "Request This Video"}
                 </Button>
+
               </div>
+
             </CardBody>
           </Card>
         ))}
