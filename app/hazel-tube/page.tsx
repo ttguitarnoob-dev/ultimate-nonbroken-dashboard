@@ -146,7 +146,7 @@ export default function YouTubeSearchAddQueue() {
     <div className="flex flex-col gap-6 w-full max-w-7xl">
       <p>Search for a video. Switch the Audio Only switch if you want to only download the audio.</p>
       {/* Search input */}
-      <div className="flex justify-center gap-2 w-full max-w-7xl">
+      <div className="flex justify-center flex-col md:flex-row gap-2 w-full max-w-7xl">
         <Input
           label="Search YouTube"
           value={query}
