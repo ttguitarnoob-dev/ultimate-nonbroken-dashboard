@@ -298,3 +298,15 @@ export async function downloadMyVid(url: string, resolution: string): Promise<st
     return (error instanceof Error) ? error.message : String(error);
   }
 }
+
+// RAMYNET LOCATIONS FETCH
+export async function GetRamyNetLocations() {
+
+  const items = await prisma.ramyNetLocations.findMany({
+    orderBy: {
+      createdAt: 'desc', // Optional: sort newest first
+    },
+  });
+
+  return items
+}

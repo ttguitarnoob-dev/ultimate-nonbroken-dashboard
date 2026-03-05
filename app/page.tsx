@@ -12,6 +12,7 @@ export default function Home() {
       <DashboardButton label="PiHole" url="http://10.24.24.25/admin/login" isExternal={true} />
       <DashboardButton label="Tube Search" url="/tube-search" isExternal={false} />
       <DashboardButton label="Carry List" url="/carry-list" isExternal={false} />
+      <DashboardButton label="RamyNet Locations" url="/ramynet-locations" isExternal={false} />
       </div>
     </section>
     </>
