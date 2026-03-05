@@ -33,3 +33,14 @@ model HazelSearch {
   query     String
   createdAt DateTime @default(now())
 }
+
+model RamyNetLocations {
+  id           Int      @id @default(autoincrement())
+  latitude  String
+  longitude String
+  altitude String
+  ipAddress String
+
+  locationName String
+  createdAt    DateTime @default(now())
+}
