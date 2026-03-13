@@ -133,3 +133,43 @@ export const inappropriateSearchTerms = [
     "roulette",
     "poker"
   ];
+
+  // Find location with gps coordinates
+  export async function getNearestPlace(
+    latitude: string,
+    longitude: string
+  ): Promise<string | null> {
+    try {
+      const res = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=1`,
+        {
+          headers: {
+            "User-Agent": "my-app/1.0"
+          }
+        }
+      );
+  
+      const data = await res.json();
+  
+      const name =
+        data.name ||
+        data.address?.amenity ||
+        data.address?.building ||
+        data.address?.road;
+  
+      const city =
+        data.address?.city ||
+        data.address?.town ||
+        data.address?.village ||
+        "";
+  
+      const state = data.address?.state || "";
+  
+      if (!name) return null;
+  
+      return `${name} - ${city}, ${state}`;
+    } catch (err) {
+      console.error(err);
+      return null;
+    }
+  }
