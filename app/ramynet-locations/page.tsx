@@ -59,7 +59,7 @@ export default async function RamyNetLocationsPage() {
                 </Card>
               ))
             ) : (
-              <p className="text-gray-500">No locations found.</p>
+              <p className="text-gray-500">No locations found for some reason.</p>
             )}
           </div>
         </>
