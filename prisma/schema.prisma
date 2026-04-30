@@ -44,3 +44,11 @@ model RamyNetLocations {
   locationName String
   createdAt    DateTime @default(now())
 }
+
+model BubblesInquiry {
+  id        String @id @default(cuid())
+  ownerName String
+  dogName   String
+  email     String
+  inquiry   String
+}
