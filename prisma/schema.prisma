@@ -45,10 +45,61 @@ model RamyNetLocations {
   createdAt    DateTime @default(now())
 }
 
+// BARKING BUBBLES STUFF HERE
+
 model BubblesInquiry {
   id        String @id @default(cuid())
   ownerName String
   dogName   String
   email     String
   inquiry   String
+}
+
+enum FurLength {
+  SHORT
+  MEDIUM
+  LONG
+}
+
+enum DogSize {
+  SMALL
+  MEDIUM
+  LARGE
+}
+
+model AvailabilitySlot {
+  id          String       @id @default(cuid())
+  startsAt    DateTime     @unique
+  createdAt   DateTime     @default(now())
+
+  appointment Appointment?
+
+  @@index([startsAt])
+}
+
+model Appointment {
+  id                 String           @id @default(cuid())
+
+  ownerName          String
+  email              String
+  phoneNumber        String?
+
+  dogName            String
+
+  furLength          FurLength
+  dogSize            DogSize
+
+  allergy            Boolean
+  allergyDescription String?
+
+  location           String
+  additionalDetails  String
+
+  slotId             String           @unique
+  slot               AvailabilitySlot @relation(fields: [slotId], references: [id], onDelete: Restrict)
+
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+
+  @@index([email])
 }
