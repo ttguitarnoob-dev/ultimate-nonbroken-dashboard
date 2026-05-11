@@ -1,8 +1,8 @@
 import { prisma } from "@/app/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 
-// const allowedOrigin = "https://prod-domain.com";
-const allowedOrigin = "https://web-dev.c-syncapp.com";
+const allowedOrigin = "https://barking-bubbles.com";
+// const allowedOrigin = "https://web-dev.c-syncapp.com";
 
 function corsHeaders() {
   return {
