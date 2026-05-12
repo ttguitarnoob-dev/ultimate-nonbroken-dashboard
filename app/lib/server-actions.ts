@@ -1,5 +1,5 @@
 "use server"
-import { BubblesInquiry } from "@/types";
+import { BubblesAppointment, BubblesInquiry } from "@/types";
 import { prisma } from "./db";
 
 //CREATE CARRY ITEM
@@ -320,6 +320,19 @@ export async function GetRamyNetLocations() {
 
 export async function GetBubblesInquiries(): Promise<BubblesInquiry[]> {
   const items = await prisma.bubblesInquiry.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+  return items;
+}
+
+export async function GetBubblesAppointments(): Promise<BubblesAppointment[]> {
+  const items = await prisma.appointment.findMany({
+    include: {
+      slot: true,
+    },
     orderBy: {
       createdAt: "desc",
     },

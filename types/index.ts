@@ -12,3 +12,30 @@ export type BubblesInquiry = {
   inquiry: string;
   createdAt: Date;
 }
+
+export type BubblesAppointment = {
+  id: string;
+
+  ownerName: string;
+  email: string;
+  phoneNumber?: string | null;
+
+  dogName: string;
+
+  furLength: "SHORT" | "MEDIUM" | "LONG";
+  dogSize: "SMALL" | "MEDIUM" | "LARGE";
+
+  allergy: boolean;
+  allergyDescription?: string | null;
+
+  location: string;
+  additionalDetails: string;
+
+  createdAt: Date;
+  updatedAt: Date;
+
+  slot: {
+    id: string;
+    startsAt: Date;
+  };
+};
