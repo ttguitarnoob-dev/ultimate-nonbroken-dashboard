@@ -1,4 +1,5 @@
 "use server"
+import { BubblesInquiry } from "@/types";
 import { prisma } from "./db";
 
 //CREATE CARRY ITEM
@@ -309,4 +310,20 @@ export async function GetRamyNetLocations() {
   });
 
   return items
+}
+
+
+
+// BARKING BUBBLES STUFF
+
+// Get Inquiries
+
+export async function GetBubblesInquiries(): Promise<BubblesInquiry[]> {
+  const items = await prisma.bubblesInquiry.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+  return items;
 }
