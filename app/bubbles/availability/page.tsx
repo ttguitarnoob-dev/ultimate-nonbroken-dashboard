@@ -1,81 +1,174 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { title } from "@/components/primitives";
+import { SetAvailabilitySlot } from "@/app/lib/server-actions";
+import { Button } from "@heroui/button";
+import { useState } from "react";
 
-// import { Button, DatePicker, TimeInput } from "@heroui/react";
-import { Time } from "@internationalized/date";
+
+type AvailabilitySlot = {
+
+  id: string;
+
+  startsAt: Date;
+
+  createdAt: Date;
+
+};
 
 export default function AvailabilityPage() {
-  const [date, setDate] = useState<any>(null);
-  const [time, setTime] = useState<Time | null>(new Time(9, 0));
 
-  const startsAt = useMemo(() => {
-    if (!date || !time) return null;
+  const [date, setDate] = useState("");
 
-    // Convert HeroUI date + time into a native JS Date
-    return new Date(
-      date.year,
-      date.month - 1,
-      date.day,
-      time.hour,
-      time.minute,
-      0,
-      0
-    );
-  }, [date, time]);
+  const [time, setTime] = useState("");
 
-  async function handleSubmit() {
-    if (!startsAt) return;
+  const [slots, setSlots] = useState<AvailabilitySlot[]>([]);
 
-    // This matches your Prisma model:
-    // {
-    //   startsAt: Date
-    // }
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
 
-    const payload = {
+    e.preventDefault();
+
+    if (!date || !time) {
+
+      console.log("Missing date or time");
+
+      return;
+
+    }
+
+    const startsAt = new Date(`${date}T${time}`);
+
+    const newItem = await SetAvailabilitySlot(
+
       startsAt,
-    };
 
-    console.log(payload);
+    );
 
-    // later:
-    // await CreateAvailabilitySlot(payload)
+    // Add newest slot to state
+
+    setSlots((prev) => [newItem, ...prev]);
+
+    console.log(newItem);
+
+    // optional reset
+
+    setDate("");
+
+    setTime("");
+
   }
 
   return (
-    <div className="space-y-6">
-      <h1 className={title()}>Availability</h1>
 
-      {/* <div className="flex max-w-md flex-col gap-4 rounded-2xl border p-6 shadow-sm">
-        <DatePicker
-          label="Date"
-          value={date}
-          onChange={setDate}
-        />
+    <div className="min-h-screen p-6 space-y-8">
 
-        <TimeInput
-          label="Time"
-          value={time}
-          onChange={setTime}
-        />
+      <form
 
-        <Button color="primary" onPress={handleSubmit}>
+        onSubmit={handleSubmit}
+
+        className="max-w-md space-y-4 rounded-2xl border p-6 shadow-sm"
+
+      >
+
+        <h1 className="text-2xl font-bold">
+
           Create Availability Slot
+
+        </h1>
+
+        <div className="space-y-2">
+
+          <label className="block text-sm font-medium">
+
+            Date
+
+          </label>
+
+          <input
+
+            type="date"
+
+            value={date}
+
+            onChange={(e) => setDate(e.target.value)}
+
+            className="w-full rounded-lg border p-3"
+
+          />
+
+        </div>
+
+        <div className="space-y-2">
+
+          <label className="block text-sm font-medium">
+
+            Time
+
+          </label>
+
+          <input
+
+            type="time"
+
+            value={time}
+
+            onChange={(e) => setTime(e.target.value)}
+
+            className="w-full rounded-lg border p-3"
+
+          />
+
+        </div>
+
+        <Button type="submit" color="primary" radius="full">
+          Submit
         </Button>
 
-        {startsAt && (
-          <div className="rounded-xl bg-default-100 p-3 text-sm">
-            <p className="font-medium">Generated DateTime</p>
+      </form>
 
-            <p>{startsAt.toString()}</p>
+      <div className="max-w-md space-y-3">
 
-            <p className="mt-2 text-default-500">
-              ISO: {startsAt.toISOString()}
-            </p>
-          </div>
+        <h2 className="text-xl font-semibold">
+
+          Added Slots
+
+        </h2>
+
+        {slots.length === 0 ? (
+
+          <p className="text-sm text-gray-500">
+
+            No slots added yet
+
+          </p>
+
+        ) : (
+
+          slots.map((slot) => (
+
+            <div
+
+              key={slot.id}
+
+              className="rounded-xl border p-4"
+
+            >
+
+              <p>
+
+                {new Date(slot.startsAt).toLocaleString()}
+
+              </p>
+
+            </div>
+
+          ))
+
         )}
-      </div> */}
+
+      </div>
+
     </div>
+
   );
+
 }

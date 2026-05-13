@@ -340,3 +340,13 @@ export async function GetBubblesAppointments(): Promise<BubblesAppointment[]> {
 
   return items;
 }
+
+export async function SetAvailabilitySlot(startsAt: Date) {
+  const newItem = await prisma.availabilitySlot.create({
+    data: {
+      startsAt,
+    },
+  });
+
+  return newItem;
+}
