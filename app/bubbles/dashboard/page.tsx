@@ -1,4 +1,4 @@
-
+export const dynamic = "force-dynamic";
 
 import { GetBubblesAppointments, GetBubblesInquiries } from "@/app/lib/server-actions";
 import { title } from "@/components/primitives";
