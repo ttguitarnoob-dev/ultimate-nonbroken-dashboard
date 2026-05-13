@@ -12,7 +12,14 @@ export default async function DashboardPage() {
 
     const inquiries = await GetBubblesInquiries()
     const appointments = await GetBubblesAppointments()
+    const formatCentralTime = (date: string | Date) =>
+        new Intl.DateTimeFormat("en-US", {
+          dateStyle: "medium",
+          timeStyle: "short",
+          timeZone: "America/Chicago",
+        }).format(new Date(date));
 
+    console.log("APT APT", appointments)
 
     return (
         <div className="space-y-6">
@@ -48,7 +55,7 @@ export default async function DashboardPage() {
 
                         <div className="text-right">
                             <p className="text-small font-medium">
-                                {new Date(item.slot.startsAt).toLocaleString()}
+                                {formatCentralTime(new Date(item.slot.startsAt))}
                             </p>
 
                             <p className="text-tiny text-default-400">
