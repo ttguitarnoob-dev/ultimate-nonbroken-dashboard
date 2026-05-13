@@ -2,8 +2,10 @@
 
 import { GetBubblesAppointments, GetBubblesInquiries } from "@/app/lib/server-actions";
 import { title } from "@/components/primitives";
+import { Button } from "@heroui/button";
 import { Card, CardHeader, CardBody } from "@heroui/card";
 import { Divider } from "@heroui/divider";
+import { Link } from "@heroui/link";
 import { Spinner } from "@heroui/spinner";
 
 export default async function DashboardPage() {
@@ -15,6 +17,9 @@ export default async function DashboardPage() {
     return (
         <div className="space-y-6">
             <h1 className={title()}>Barking Bubbles Dashboard</h1>
+            <Button radius="full" color="primary" as={Link} href="/bubbles/availability">
+                Set Availability
+            </Button>
 
             <section>
             <div className="space-y-6">
