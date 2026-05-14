@@ -13,6 +13,7 @@ export default function Home() {
       <DashboardButton label="Tube Search" url="/tube-search" isExternal={false} />
       <DashboardButton label="Carry List" url="/carry-list" isExternal={false} />
       <DashboardButton label="RamyNet Locations" url="/ramynet-locations" isExternal={false} />
+      <DashboardButton label="Bubbles Dashboard" url="/bubbles/dashboard" isExternal={false} />
       </div>
     </section>
     </>
