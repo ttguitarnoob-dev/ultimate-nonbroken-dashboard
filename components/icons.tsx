@@ -209,3 +209,27 @@ export const SearchIcon = (props: IconSvgProps) => (
     />
   </svg>
 );
+
+export const TrashIcon = (props: IconSvgProps) => (
+  <svg
+    aria-hidden="true"
+    fill="none"
+    focusable="false"
+    height="1em"
+    role="presentation"
+    viewBox="0 0 16 16"
+    width="1em"
+    {...props}
+  >
+    <path
+      d="M1 2H4V0H12V2H15V4H1V2Z"
+      fill="currentColor"
+    />
+    <path
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M13 6H3V16H13V6ZM9 9H7V13H9V9Z"
+      fill="currentColor"
+    />
+  </svg>
+);

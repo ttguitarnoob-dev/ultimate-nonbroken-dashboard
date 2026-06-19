@@ -312,6 +312,17 @@ export async function GetRamyNetLocations() {
   return items
 }
 
+// DELETE RAMYNET LOCATION
+export async function DeleteRamyNetLocation(id: number) {
+  const item = await prisma.ramyNetLocations.delete({
+    where: {
+      id,
+    },
+  });
+
+  return item;
+}
+
 
 
 // BARKING BUBBLES STUFF
