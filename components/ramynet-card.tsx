@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@heroui/button";
-import { Card, CardHeader, CardBody } from "@heroui/card";
+import { Card, CardHeader, CardBody, CardFooter } from "@heroui/card";
 import { TrashIcon } from "./icons";
 import { Image } from "@heroui/image";
 import { DeleteRamyNetLocation } from "@/app/lib/server-actions";
@@ -20,13 +20,14 @@ export default function RamyNetCard(location: any) {
                 key={location.id}
                 className="backdrop-blur-lg bg-black/20 dark:bg-white/10 transition-shadow"
             >
-                <CardHeader className="px-4 py-2 border-b border-gray-100">
-                    <h3 className="text-xl font-bold">{location.location.locationName}</h3>
-                    <Button
-                        isIconOnly
-                        startContent={<TrashIcon />}
-                        onPress={() => handleDelete(location.location.id)}
-                    />
+                <CardHeader className="grid grid-cols-[40px_1fr_40px] items-center px-4 py-2 border-b border-gray-100">
+                    <div />
+
+                    <h3 className="text-xl font-bold text-center break-words">
+                        {location.location.locationName}
+                    </h3>
+
+                    
                 </CardHeader>
 
                 <CardBody className="px-4 py-3 space-y-1 text-gray-700">
@@ -57,6 +58,13 @@ export default function RamyNetCard(location: any) {
                             }).format(new Date(location.location.createdAt))
                             : "N/A"}
                     </div>
+                    <CardFooter className="flex justify-center">
+                    <Button
+                        isIconOnly
+                        startContent={<TrashIcon />}
+                        onPress={() => handleDelete(location.location.id)}
+                    />
+                    </CardFooter>
                 </CardBody>
             </Card>
         </>
