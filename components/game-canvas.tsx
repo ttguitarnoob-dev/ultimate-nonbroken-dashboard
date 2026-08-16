@@ -26,24 +26,17 @@ export default function GameCanvas() {
       letterbox: true,
       background: [0, 0, 0],
       global: false,
+    
+      root: containerRef.current,
     });
 
-    /*
-     * Actual sprite sheet layout:
-     *
-     *  0       1       2       3
-     *  UP 1    UP 2    DOWN 2   DOWN 1
-     *
-     *  4       5       6       7
-     *  LEFT 2  LEFT 1  RIGHT 1  RIGHT 2
-     *
-     * Idle frames:
-     *   up    = 0
-     *   down  = 3
-     *   left  = 5
-     *   right = 6
-     */
+    // BACKGROUND SPRITE
+    k.loadSprite(
+      "background",
+      "/Game/Scenes/opening-scene/scene-1.webp",
+    );
 
+    // PLAYER SPRITE
     k.loadSprite("player", "/Game/Sprites/Hero/spritesheet.png", {
       sliceX: 4,
       sliceY: 2,
@@ -52,34 +45,45 @@ export default function GameCanvas() {
         "run-up": {
           from: 0,
           to: 1,
-          speed: 6,
+          speed: 8,
           loop: true,
         },
 
         "run-down": {
           from: 3,
           to: 2,
-          speed: 6,
+          speed: 8,
           loop: true,
         },
 
         "run-left": {
           from: 5,
           to: 4,
-          speed: 6,
+          speed: 8,
           loop: true,
         },
 
         "run-right": {
           from: 6,
           to: 7,
-          speed: 6,
+          speed: 8,
           loop: true,
         },
       },
     });
 
     k.onLoad(() => {
+
+      // BACKGROUND PLACEMENT
+      k.add([
+
+        k.sprite("background"),
+    
+        k.pos(0, 0),
+    
+      ]);
+
+      // PLAYER CHARACTER PLACEMENT
       const player = k.add([
         k.sprite("player", {
           frame: idleFrames.down,
@@ -91,6 +95,8 @@ export default function GameCanvas() {
         ),
 
         k.anchor("center"),
+
+        k.scale(0.3),
       ]);
 
       const SPEED = 150;
@@ -124,7 +130,6 @@ export default function GameCanvas() {
 
         const isMoving = dx !== 0 || dy !== 0;
 
-        // Normalize diagonal movement
         if (dx !== 0 && dy !== 0) {
           const length = Math.sqrt(
             dx * dx + dy * dy,
@@ -139,11 +144,23 @@ export default function GameCanvas() {
             dx * SPEED,
             dy * SPEED,
           );
-
+        
+          // Keep player inside the 1280x720 game area.
+          const halfWidth = 16;
+          const halfHeight = 16;
+        
+          player.pos.x = Math.max(
+            halfWidth,
+            Math.min(k.width() - halfWidth, player.pos.x),
+          );
+        
+          player.pos.y = Math.max(
+            halfHeight,
+            Math.min(k.height() - halfHeight, player.pos.y),
+          );
+        
           const animation = `run-${facing}`;
-
-          // Only restart the animation when movement
-          // begins or the direction changes.
+        
           if (
             !moving ||
             player.curAnim() !== animation
@@ -151,7 +168,6 @@ export default function GameCanvas() {
             player.play(animation);
           }
         } else if (moving) {
-          // Return to the correct idle frame.
           player.stop();
           player.frame = idleFrames[facing];
         }
@@ -166,9 +182,11 @@ export default function GameCanvas() {
   }, []);
 
   return (
-    <div
-      ref={containerRef}
-      className="w-[1280px] h-[720px] overflow-hidden"
-    />
+    <div className="rounded-2xl border-4 border-white/20 overflow-hidden shadow-2xl">
+      <div
+        ref={containerRef}
+        className="w-[1280px] h-[720px]"
+      />
+    </div>
   );
 }
