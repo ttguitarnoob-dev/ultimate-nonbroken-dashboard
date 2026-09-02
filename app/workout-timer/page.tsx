@@ -190,6 +190,63 @@ export default function WorkoutTimer() {
    * ------------------------------------------------------------
    */
 
+  const loadPreset = () => {
+    const presetSets: WorkoutSet[] = [
+      {
+        id: crypto.randomUUID(),
+        name: "Warmup",
+        duration: 10,
+        unit: "seconds",
+        reps: 2,
+      },
+      {
+        id: crypto.randomUUID(),
+        name: "Half Crimp",
+        duration: 10,
+        unit: "seconds",
+        reps: 3,
+      },
+      {
+        id: crypto.randomUUID(),
+        name: "3 Finger Drag",
+        duration: 10,
+        unit: "seconds",
+        reps: 3,
+      },
+      {
+        id: crypto.randomUUID(),
+        name: "Middle Fingers Pocket",
+        duration: 10,
+        unit: "seconds",
+        reps: 1,
+      },
+      {
+        id: crypto.randomUUID(),
+        name: "Front Fingers Pocket",
+        duration: 10,
+        unit: "seconds",
+        reps: 1,
+      },
+      {
+        id: crypto.randomUUID(),
+        name: "Warm Down",
+        duration: 10,
+        unit: "seconds",
+        reps: 1,
+      },
+    ];
+
+    setSets(presetSets);
+    setRestValue(50);
+    setRestUnit("seconds");
+
+    setCurrentSetIndex(0);
+    setCurrentRep(1);
+    setPhase("set");
+    setPhaseRemaining(10);
+    setTotalElapsed(0);
+  };
+
   const addSet = () => {
     setSets((current) => [
       ...current,
@@ -220,9 +277,9 @@ export default function WorkoutTimer() {
       current.map((set) =>
         set.id === id
           ? {
-              ...set,
-              ...updates,
-            }
+            ...set,
+            ...updates,
+          }
           : set
       )
     );
@@ -358,21 +415,21 @@ export default function WorkoutTimer() {
           Math.floor(
             (now -
               workoutStartRef.current) /
-              1000
+            1000
           );
 
         const phaseElapsed =
           Math.floor(
             (now -
               phaseStartRef.current) /
-              1000
+            1000
           );
 
         const remaining =
           Math.max(
             0,
             phaseDurationRef.current -
-              phaseElapsed
+            phaseElapsed
           );
 
         setTotalElapsed(elapsed);
@@ -399,7 +456,7 @@ export default function WorkoutTimer() {
           remaining <= 5 &&
           remaining > 0 &&
           lastCountdownRef.current !==
-            remaining
+          remaining
         ) {
           lastCountdownRef.current =
             remaining;
@@ -641,9 +698,9 @@ export default function WorkoutTimer() {
   const currentSetSeconds =
     currentSet
       ? toSeconds(
-          currentSet.duration,
-          currentSet.unit
-        )
+        currentSet.duration,
+        currentSet.unit
+      )
       : 0;
 
   const restSeconds =
@@ -655,9 +712,9 @@ export default function WorkoutTimer() {
   const progress =
     phaseDurationRef.current > 0
       ? ((phaseDurationRef.current -
-          phaseRemaining) /
-          phaseDurationRef.current) *
-        100
+        phaseRemaining) /
+        phaseDurationRef.current) *
+      100
       : 0;
 
   /*
@@ -734,11 +791,10 @@ export default function WorkoutTimer() {
           <div className="flex flex-1 flex-col items-center justify-center">
 
             <div
-              className={`mb-5 rounded-full px-5 py-2 text-sm font-bold uppercase tracking-[0.25em] ${
-                phase === "set"
+              className={`mb-5 rounded-full px-5 py-2 text-sm font-bold uppercase tracking-[0.25em] ${phase === "set"
                   ? "bg-white text-zinc-950"
                   : "bg-zinc-800 text-zinc-300"
-              }`}
+                }`}
             >
               {phase}
             </div>
@@ -780,16 +836,15 @@ export default function WorkoutTimer() {
               {phase === "set"
                 ? "Rest"
                 : currentSet &&
-                    currentRep <
-                      currentSet.reps
-                  ? `${currentSet.name} • Rep ${
-                      currentRep + 1
-                    }`
+                  currentRep <
+                  currentSet.reps
+                  ? `${currentSet.name} • Rep ${currentRep + 1
+                  }`
                   : currentSetIndex + 1 <
-                      sets.length
+                    sets.length
                     ? sets[
-                        currentSetIndex + 1
-                      ].name
+                      currentSetIndex + 1
+                    ].name
                     : "Workout complete"}
             </p>
           </div>
@@ -838,24 +893,32 @@ export default function WorkoutTimer() {
 
   return (
     <main className="min-h-screen bg-zinc-950 px-4 py-6 text-white">
-      <div className="mx-auto max-w-2xl">
+      <div className="mx-auto max-w-4xl">
 
         {/* Header */}
 
         <div className="pt-4">
-          <p className="text-sm font-medium uppercase tracking-[0.2em] text-zinc-500">
-            Workout
-          </p>
+  <div className="text-center">
+    <p className="text-sm font-medium uppercase tracking-[0.2em] text-zinc-500">
+      Workout
+    </p>
 
-          <h1 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
-            Interval Timer
-          </h1>
+    <h1 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
+      Interval Timer
+    </h1>
 
-          <p className="mt-2 max-w-md text-zinc-500">
-            Build your workout, then let the
-            timer handle the transitions.
-          </p>
-        </div>
+    <p className="mx-auto mt-2 max-w-md text-zinc-500">
+      Build the workout and then work it out.
+    </p>
+
+    <button
+      onClick={loadPreset}
+      className="mt-6 rounded-2xl border border-zinc-700 bg-zinc-900 px-6 py-3 text-sm font-semibold text-zinc-300 transition hover:border-zinc-500 hover:bg-zinc-800 hover:text-white active:scale-95"
+    >
+      Load Preset
+    </button>
+  </div>
+</div>
 
         {/* Sets */}
 
@@ -1036,7 +1099,7 @@ export default function WorkoutTimer() {
                           set.duration,
                           set.unit
                         ) *
-                          set.reps
+                        set.reps
                       )}
                     </span>
                   </div>
@@ -1135,7 +1198,7 @@ export default function WorkoutTimer() {
                       set.duration,
                       set.unit
                     ) *
-                      set.reps,
+                    set.reps,
                   0
                 )
               )}
@@ -1150,12 +1213,12 @@ export default function WorkoutTimer() {
             <span className="font-mono text-sm tabular-nums">
               {formatTime(
                 restSeconds *
-                  sets.reduce(
-                    (total, set) =>
-                      total +
-                      set.reps,
-                    0
-                  )
+                sets.reduce(
+                  (total, set) =>
+                    total +
+                    set.reps,
+                  0
+                )
               )}
             </span>
           </div>
@@ -1174,16 +1237,16 @@ export default function WorkoutTimer() {
                       set.duration,
                       set.unit
                     ) *
-                      set.reps,
+                    set.reps,
                   0
                 ) +
-                  restSeconds *
-                    sets.reduce(
-                      (total, set) =>
-                        total +
-                        set.reps,
-                      0
-                    )
+                restSeconds *
+                sets.reduce(
+                  (total, set) =>
+                    total +
+                    set.reps,
+                  0
+                )
               )}
             </span>
           </div>

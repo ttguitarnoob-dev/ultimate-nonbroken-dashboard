@@ -1,6 +1,7 @@
+import GameCanvas from "@/components/the-game/components/game-canvas";
+
 export const dynamic = "force-dynamic";
 
-import GameCanvas from "@/components/game-canvas";
 
 export default async function GamePage() {
   return (

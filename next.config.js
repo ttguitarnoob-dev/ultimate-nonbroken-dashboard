@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    allowedDevOrigins: ['web-dev.c-syncapp.com']
+    allowedDevOrigins: ['web-dev.kitty-cottage.com']
 };
 
 module.exports = nextConfig;

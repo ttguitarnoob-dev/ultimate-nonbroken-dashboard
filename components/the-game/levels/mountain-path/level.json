@@ -1,0 +1,40 @@
+{
+    "name": "Remote Mountain Path",
+  
+    "width": 1280,
+    "height": 720,
+  
+    "collisions": [
+      
+      {
+        "id": "village-well",
+        "type": "circle",
+        "x": 420,
+        "y": 320,
+        "radius": 32
+      }
+    ],
+  
+    "exits": [
+      {
+        "id": "south-exit",
+  
+        "position": {
+          "x": 590,
+          "y": 0
+        },
+  
+        "width": 100,
+        "height": 40,
+  
+        "target": {
+          "scene": "mountain-village",
+          "spawn": {
+            "x": 640,
+            "y": 680
+          },
+          "direction": "up"
+        }
+      }
+    ]
+  }
