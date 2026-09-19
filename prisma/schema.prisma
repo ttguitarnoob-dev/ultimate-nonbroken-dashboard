@@ -104,3 +104,15 @@ model Appointment {
 
   @@index([email])
 }
+
+// FLOWERS
+
+model BusinessInquiry {
+  id           Int      @id @default(autoincrement())
+  businessName String
+  contactName  String
+  phone        String
+  email        String
+  message      String
+  createdAt    DateTime @default(now())
+}
