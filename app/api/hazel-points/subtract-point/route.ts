@@ -15,7 +15,9 @@ export async function GET(
       },
     });
 
-    return NextResponse.json({ success: true, data: updatedItem });
+    return new NextResponse(JSON.stringify({ success: true, data: updatedItem }), {
+      headers: { 'Content-Type': 'application/json' }
+    });
   } catch (error) {
     return NextResponse.json({ error: 'Failed to update item' }, { status: 500 });
   }
