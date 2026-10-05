@@ -1,5 +1,5 @@
 "use server"
-import { BubblesAppointment, BubblesInquiry } from "@/types";
+import { BubblesAppointment, BubblesInquiry, CreateHazelRewardData, HazelReward } from "@/types";
 import { prisma } from "./db";
 
 //CREATE CARRY ITEM
@@ -360,4 +360,45 @@ export async function SetAvailabilitySlot(startsAt: Date) {
   });
 
   return newItem;
+}
+
+// HAZELPOINTS STUFF
+
+// Get points
+export async function GetPoints(): Promise<number> {
+  try {
+    const id = 1;
+    const points = await prisma.hazelPoint.findUnique({
+      where: { id },
+    });
+    return points?.points ?? 0;
+  } catch (error) {
+    console.error("Failed to fetch points:", error);
+    throw new Error("Unable to retrieve points.");
+  }
+}
+
+// Get rewards
+export async function GetHazelRewards(): Promise<HazelReward[]> {
+  try {
+    const rewards = await prisma.hazelRewards.findMany();
+    return rewards;
+  } catch (error) {
+    console.error("Failed to fetch rewards:", error);
+    throw new Error("Unable to retrieve rewards.");
+  }
+}
+
+// Create Reward
+// Create Reward
+export async function CreateHazelReward(item: CreateHazelRewardData) {
+  try {
+    const newReward = await prisma.hazelRewards.create({
+      data: item,
+    });
+    return newReward;
+  } catch (error) {
+    console.error("Failed to create reward:", error);
+    throw new Error("Unable to create reward.");
+  }
 }

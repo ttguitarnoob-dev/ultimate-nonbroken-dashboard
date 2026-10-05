@@ -116,3 +116,27 @@ model BusinessInquiry {
   message      String
   createdAt    DateTime @default(now())
 }
+
+// HAZELPOINTS
+model HazelPoint {
+  id     Int @id @default(autoincrement())
+  points Int
+}
+
+model HazelRewards {
+  id              Int              @id @default(autoincrement())
+  name            String
+  link            String
+  image           String
+  cost            Int
+  createdAt       DateTime         @default(now())
+  purchaseRequsts PurchaseRequst[]
+}
+
+model PurchaseRequst {
+  id             Int          @id @default(autoincrement())
+  item           HazelRewards @relation(fields: [hazelRewardsId], references: [id])
+  approved       Boolean
+  createdAt      DateTime     @default(now())
+  hazelRewardsId Int
+}

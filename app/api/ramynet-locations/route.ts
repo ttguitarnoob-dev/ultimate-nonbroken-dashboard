@@ -4,14 +4,10 @@ import { NextRequest } from "next/server"
 
 export async function POST(req: NextRequest) {
     const data = await req.json()
-    console.log("DATARECIEVEI", data)
     const latitude = data.latitude
     const longitude = data.longitude
-    console.log("Accurate location data", latitude, longitude)
     const place = await getNearestPlace(latitude, longitude)
-    console.log("DEPLACE", place)
     data.locationName = place
-    console.log("FINSALDL", data)
 
     // const submission = data
 

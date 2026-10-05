@@ -39,3 +39,13 @@ export type BubblesAppointment = {
     startsAt: Date;
   };
 };
+
+export type HazelReward = {
+  id: number;
+  name: string;
+  link: string;
+  image: string;
+  cost: number;
+}
+
+export type CreateHazelRewardData = Omit<HazelReward, "id">;
