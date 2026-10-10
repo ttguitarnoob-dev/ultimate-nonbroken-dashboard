@@ -393,6 +393,7 @@ export async function GetHazelRewards(): Promise<HazelReward[]> {
 // Create Reward
 export async function CreateHazelReward(item: CreateHazelRewardData) {
   try {
+    console.log("creating rewaqrad", item)
     const newReward = await prisma.hazelRewards.create({
       data: item,
     });
