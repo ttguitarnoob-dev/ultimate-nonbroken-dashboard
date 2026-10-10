@@ -43,7 +43,7 @@ export type BubblesAppointment = {
 export type HazelReward = {
   id: number;
   name: string;
-  link: string;
+  link?: string | null;
   image: string;
   cost: number;
 }

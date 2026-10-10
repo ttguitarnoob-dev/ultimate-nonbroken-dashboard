@@ -106,11 +106,11 @@ export default function HazelRewardForm() {
           <Label>Link</Label>
           <Input
             id="reward-link"
-            value={formData.link}
+            value={formData.link ?? ""}
             onChange={(e) =>
               setFormData({
                 ...formData,
-                link: e.target.value,
+                link: e.target.value ?? "",
               })
             }
           />
