@@ -1,30 +1,43 @@
 "use client";
 
 import { CreateHazelReward } from "@/app/lib/server-actions";
-import { CreateHazelRewardData, HazelReward } from "@/types";
+import { CreateHazelRewardData } from "@/types";
+import {
+  Alert,
+  Button,
+  Form,
+  Input,
+  Label,
+  NumberField,
+  Spinner,
+  TextField,
+} from "@heroui/react";
 import React, { useState } from "react";
 
-
-
 export default function HazelRewardForm() {
-  const [formData, setFormData] = useState<CreateHazelRewardData>({
+  const [formData, setFormData] = useState<Omit<CreateHazelRewardData, "image">>({
     name: "",
     link: "",
-    image: "",
-    cost: 0,
+    cost: 1,
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [feedback, setFeedback] = useState<{
+    type: "success" | "error";
+    message: string;
+  } | null>(null);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const formElement = event.currentTarget;
+    const form = new FormData(formElement);
+    const imageFile = form.get("image");
+    setIsSubmitting(true);
+    setFeedback(null);
 
     try {
-      const form = new FormData(event.currentTarget);
-
-      const imageFile = form.get("image") as File | null;
-
       let imageUrl = "";
 
-      if (imageFile && imageFile.size > 0) {
+      if (imageFile instanceof File && imageFile.size > 0) {
         const imageUploadData = new FormData();
         imageUploadData.append("file", imageFile);
 
@@ -38,40 +51,47 @@ export default function HazelRewardForm() {
         }
 
         const uploadResult = await uploadResponse.json();
+        if (typeof uploadResult.url !== "string" || !uploadResult.url) {
+          throw new Error("Image upload did not return a URL");
+        }
         imageUrl = uploadResult.url;
       }
 
       const rewardData: CreateHazelRewardData = {
-        name: form.get("name") as string,
-        link: form.get("link") as string,
-        cost: Number(form.get("cost")),
+        ...formData,
         image: imageUrl,
       };
-      console.log("WHTAT", rewardData)
 
       await CreateHazelReward(rewardData);
+      formElement.reset();
+      setFormData({ name: "", link: "", cost: 0 });
+      setFeedback({ type: "success", message: "Reward created successfully." });
     } catch (error) {
       console.error("Error submitting reward:", error);
+      setFeedback({
+        type: "error",
+        message: "Could not create the reward. Please try again.",
+      });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
     <div className="flex items-center justify-center bg-background text-foreground">
-      <form
+      <Form
         onSubmit={handleSubmit}
-        className="w-full max-w-md rounded-2xl border border-zinc-200 bg-white p-8 shadow-lg dark:border-zinc-800 dark:bg-zinc-900"
+        aria-busy={isSubmitting}
+        className="flex w-full max-w-md flex-col gap-5 rounded-2xl border border-zinc-200 bg-white p-8 shadow-lg dark:border-zinc-800 dark:bg-zinc-900"
       >
         <h2 className="mb-6 text-center text-2xl font-bold">
           Create Hazel Reward
         </h2>
 
-        <div className="mb-4">
-          <label className="mb-2 block text-sm font-medium">Name</label>
-
-          <input
-            name="name"
-            type="text"
-            className="w-full rounded-lg border border-zinc-300 bg-transparent px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-zinc-700"
+        <TextField isDisabled={isSubmitting} isRequired name="name">
+          <Label>Name</Label>
+          <Input
+            id="reward-name"
             value={formData.name}
             onChange={(e) =>
               setFormData({
@@ -79,17 +99,13 @@ export default function HazelRewardForm() {
                 name: e.target.value,
               })
             }
-            required
           />
-        </div>
+        </TextField>
 
-        <div className="mb-4">
-          <label className="mb-2 block text-sm font-medium">Link</label>
-
-          <input
-            name="link"
-            type="url"
-            className="w-full rounded-lg border border-zinc-300 bg-transparent px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-zinc-700"
+        <TextField isDisabled={isSubmitting} name="link" type="url">
+          <Label>Link</Label>
+          <Input
+            id="reward-link"
             value={formData.link}
             onChange={(e) =>
               setFormData({
@@ -97,50 +113,66 @@ export default function HazelRewardForm() {
                 link: e.target.value,
               })
             }
-            required
           />
-        </div>
+        </TextField>
 
-        <div className="mb-4">
-          <label className="mb-2 block text-sm font-medium">
-            Points Cost
-          </label>
+        <NumberField
+          className="w-full"
+          isDisabled={isSubmitting}
+          isRequired
+          name="cost"
+          value={formData.cost}
+          onChange={(cost) =>
+            setFormData({ ...formData, cost: cost ?? 0 })
+          }
+        >
+          <Label>Points Cost</Label>
+          <NumberField.Group className="w-full">
+            <NumberField.DecrementButton />
+            <NumberField.Input className="flex-1" id="reward-cost" />
+            <NumberField.IncrementButton />
+          </NumberField.Group>
+        </NumberField>
 
+        <div className="flex flex-col gap-1">
+          <Label htmlFor="reward-image">Image</Label>
           <input
-            name="cost"
-            type="number"
-            min="0"
-            className="w-full rounded-lg border border-zinc-300 bg-transparent px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-zinc-700"
-            value={formData.cost}
-            onChange={(e) =>
-              setFormData({
-                ...formData,
-                cost: Number(e.target.value),
-              })
-            }
-            required
-          />
-        </div>
-
-        <div className="mb-6">
-          <label className="mb-2 block text-sm font-medium">Image</label>
-
-          <input
+            id="reward-image"
             name="image"
             type="file"
             accept="image/*"
             className="w-full text-sm text-zinc-500 file:mr-4 file:rounded-lg file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-blue-700 hover:file:bg-blue-100"
+            disabled={isSubmitting}
             required
           />
         </div>
 
-        <button
+        {feedback && (
+          <Alert status={feedback.type === "success" ? "success" : "danger"}>
+            <Alert.Indicator />
+            <Alert.Content>
+              <Alert.Title>{feedback.message}</Alert.Title>
+            </Alert.Content>
+          </Alert>
+        )}
+
+        <Button
+          className="w-full"
+          isDisabled={isSubmitting}
+          isPending={isSubmitting}
           type="submit"
-          className="w-full rounded-lg bg-blue-600 px-4 py-2 font-semibold text-white shadow-md transition duration-200 hover:bg-blue-700"
+          variant="primary"
         >
-          Create Reward
-        </button>
-      </form>
+          {isSubmitting ? (
+            <>
+              <Spinner color="current" size="sm" />
+              Creating...
+            </>
+          ) : (
+            "Create Reward"
+          )}
+        </Button>
+      </Form>
     </div>
   );
 }

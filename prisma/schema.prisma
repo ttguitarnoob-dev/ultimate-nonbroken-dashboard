@@ -126,7 +126,7 @@ model HazelPoint {
 model HazelRewards {
   id              Int              @id @default(autoincrement())
   name            String
-  link            String
+  link            String?
   image           String
   cost            Int
   createdAt       DateTime         @default(now())
