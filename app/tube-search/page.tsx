@@ -1,9 +1,5 @@
 'use client'
-import { Button } from "@heroui/button";
-import { Input } from "@heroui/input";
-import { Card, CardBody } from "@heroui/card"
-import { Select, SelectItem } from "@heroui/select"
-import { Image} from "@heroui/image"
+import { Button, Card, Input, Label, ListBox, Select, TextField } from "@heroui/react";
 import { useState } from "react";
 import { downloadMyVid } from "../lib/server-actions";
 
@@ -119,17 +115,18 @@ export default function YouTubeSearch() {
       
       {/* Search */}
       <div className="flex w-full items-end gap-2">
-        <Input
-          label="Search YouTube"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && searchYouTube()}
-          className="flex-1"
-        />
+        <TextField className="flex-1">
+          <Label>Search YouTube</Label>
+          <Input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && searchYouTube()}
+          />
+        </TextField>
         <Button
-          color="primary"
+          variant="primary"
           onPress={searchYouTube}
-          isLoading={loading}
+          isPending={loading}
           className="h-[56px]"
         >
           Searchy
@@ -139,20 +136,18 @@ export default function YouTubeSearch() {
       {/* Results */}
       <div className="flex flex-col gap-4">
         {results.map((video) => (
-          <Card
+          <Card.Root
             key={video.videoId}
             className="backdrop-blur-lg bg-black/20 dark:bg-white/5"
           >
-            <CardBody className="flex flex-col gap-4">
+            <Card.Content className="flex flex-col gap-4">
 
               {/* Thumbnail with Duration Overlay */}
               <div className="relative w-full">
-                <Image
+                <img
                   src={video.thumbnail}
                   alt={video.title}
-                  width={500}
-                  radius="sm"
-                  className="self-center w-full"
+                  className="h-auto max-h-80 w-full object-contain"
                 />
 
                 <div className="absolute bottom-2 right-2 z-10 backdrop-blur-sm bg-black/40 text-white text-xs px-2 py-1 rounded">
@@ -169,38 +164,48 @@ export default function YouTubeSearch() {
                 </p>
 
                 {/* Channel */}
-                <p className="text-sm text-default-600 mt-1">
+                <p className="text-sm text-muted mt-1">
                   {video.channel}
                 </p>
 
                 {/* Upload Date */}
-                <p className="text-xs text-default-400 mb-3">
+                <p className="text-xs text-muted mb-3">
                   {video.uploadDate}
                 </p>
 
                 {/* Controls */}
                 <div className="flex flex-col sm:flex-row gap-2 sm:items-end sm:justify-end mt-auto">
                   <Select
-                    label="Resolution"
-                    labelPlacement="outside"
-                    selectedKeys={[resolutionMap[video.videoId]]}
                     className="w-full sm:max-w-xs"
-                    classNames={{ trigger: "h-[44px]" }}
-                    onSelectionChange={(keys) =>
-                      setResolutionMap((prev) => ({
-                        ...prev,
-                        [video.videoId]: Array.from(keys)[0] as string,
-                      }))
-                    }
+                    selectedKey={resolutionMap[video.videoId]}
+                    onSelectionChange={(key) => {
+                      if (key !== null) {
+                        setResolutionMap((prev) => ({
+                          ...prev,
+                          [video.videoId]: String(key),
+                        }));
+                      }
+                    }}
                   >
-                    {RESOLUTIONS.map((res) => (
-                      <SelectItem key={res}>{res}</SelectItem>
-                    ))}
+                    <Label>Resolution</Label>
+                    <Select.Trigger className="h-[44px]">
+                      <Select.Value />
+                      <Select.Indicator />
+                    </Select.Trigger>
+                    <Select.Popover>
+                      <ListBox>
+                        {RESOLUTIONS.map((res) => (
+                          <ListBox.Item key={res} id={res} textValue={res}>
+                            {res}
+                            <ListBox.ItemIndicator />
+                          </ListBox.Item>
+                        ))}
+                      </ListBox>
+                    </Select.Popover>
                   </Select>
 
                   <Button
-                    color="success"
-                    variant="flat"
+                    variant="primary"
                     className="h-[44px] w-full sm:w-auto"
                     onPress={() => handleDownload(video.videoId)}
                   >
@@ -209,8 +214,8 @@ export default function YouTubeSearch() {
                 </div>
 
               </div>
-            </CardBody>
-          </Card>
+            </Card.Content>
+          </Card.Root>
         ))}
       </div>
     </div>

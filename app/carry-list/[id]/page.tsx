@@ -1,7 +1,5 @@
 import { GetCarryItem } from "@/app/lib/server-actions"
-import { Button } from "@heroui/button"
-import { Image } from "@heroui/image"
-import { Link } from "@heroui/link"
+import { Link } from "@heroui/react"
 
 
 
@@ -22,13 +20,14 @@ export default async function CarriedItemPage({ params }: { params: Promise<{ id
       <h2 className="text-2xl">{item.item}</h2>
       <p>Carrier: {item.name}</p>
       {item.imageURL && ( //it's fine bro
-        <Image
+        <img
           src={item.imageURL}
           alt={item.item}
+          className="h-auto max-w-full"
         />
       )}
       {/* Add any other fields you have */}
-      <Button as={Link} href="/carry-list">Done</Button>
+      <Link className="button button--primary" href="/carry-list">Done</Link>
     </section>
   )
 }

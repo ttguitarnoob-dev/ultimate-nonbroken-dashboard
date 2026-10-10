@@ -1,10 +1,7 @@
 import { prisma } from '@/app/lib/db';
 import { NextResponse } from 'next/server';
 
-export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function GET() {
   try {
     const updatedItem = await prisma.hazelPoint.update({
       where: { id: 1 },

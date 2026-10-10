@@ -1,7 +1,6 @@
 import { GetBubblesAppointments } from "@/app/lib/server-actions";
 
-import { Card, CardHeader, CardBody } from "@heroui/card";
-import { Divider } from "@heroui/divider";
+import { Card, Separator } from "@heroui/react";
 
 const formatCentralTime = (date: string | Date) =>
   new Intl.DateTimeFormat("en-US", {
@@ -20,52 +19,52 @@ export default async function AppointmentsSection() {
           Upcoming Appointments
         </h2>
   
-        <p className="text-sm text-default-500">
+        <p className="text-sm text-muted">
           Scheduled grooming visits and customer details.
         </p>
       </div>
   
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-2 2xl:grid-cols-3">
         {appointments.map((item) => (
-          <Card
+          <Card.Root
             key={item.id}
-            className="shadow-md backdrop-blur-lg bg-secondary/20 dark:bg-white/10"
+            className="shadow-md backdrop-blur-lg bg-default/20 dark:bg-white/10"
           >
-            <CardHeader className="flex items-start justify-between gap-4">
+            <Card.Header className="flex items-start justify-between gap-4">
               <div className="flex flex-col">
                 <h2 className="text-lg font-semibold">
                   {item.ownerName}
                 </h2>
   
-                <p className="text-small text-default-500">
+                <p className="text-sm text-muted">
                   {item.email}
                 </p>
   
                 {item.phoneNumber && (
-                  <p className="text-small text-default-500">
+                  <p className="text-sm text-muted">
                     {item.phoneNumber}
                   </p>
                 )}
               </div>
   
               <div className="text-right">
-                <p className="text-small font-medium">
+                <p className="text-sm font-medium">
                   {formatCentralTime(item.slot.startsAt)}
                 </p>
   
-                <p className="text-tiny text-default-400">
+                <p className="text-xs text-muted">
                   booked{" "}
                   {new Date(item.createdAt).toLocaleDateString()}
                 </p>
               </div>
-            </CardHeader>
+            </Card.Header>
   
-            <Divider />
+            <Separator />
   
-            <CardBody className="space-y-4">
+            <Card.Content className="space-y-4">
               <div className="grid grid-cols-2 gap-3">
-                <div className="rounded-xl bg-default-100 p-3">
-                  <p className="text-tiny uppercase text-default-400">
+                <div className="rounded-xl bg-default/50 p-3">
+                  <p className="text-xs uppercase text-muted">
                     Dog
                   </p>
   
@@ -74,8 +73,8 @@ export default async function AppointmentsSection() {
                   </p>
                 </div>
   
-                <div className="rounded-xl bg-default-100 p-3">
-                  <p className="text-tiny uppercase text-default-400">
+                <div className="rounded-xl bg-default/50 p-3">
+                  <p className="text-xs uppercase text-muted">
                     Size / Fur
                   </p>
   
@@ -85,8 +84,8 @@ export default async function AppointmentsSection() {
                 </div>
               </div>
   
-              <div className="rounded-xl bg-default-100 p-3">
-                <p className="text-tiny uppercase text-default-400">
+              <div className="rounded-xl bg-default/50 p-3">
+                <p className="text-xs uppercase text-muted">
                   Service Location
                 </p>
   
@@ -96,8 +95,8 @@ export default async function AppointmentsSection() {
               </div>
   
               {item.allergy ? (
-                <div className="rounded-xl border border-warning bg-warning-50 p-3">
-                  <p className="text-tiny uppercase text-warning">
+                <div className="rounded-xl border border-warning bg-warning-soft p-3">
+                  <p className="text-xs uppercase text-warning">
                     Allergy Notes
                   </p>
   
@@ -107,7 +106,7 @@ export default async function AppointmentsSection() {
                   </p>
                 </div>
               ) : (
-                <div className="rounded-xl bg-success-50 p-3">
+                <div className="rounded-xl bg-success-soft p-3">
                   <p className="text-sm text-success">
                     No allergies reported
                   </p>
@@ -115,8 +114,8 @@ export default async function AppointmentsSection() {
               )}
   
               {item.additionalDetails && (
-                <div className="rounded-xl bg-default-100 p-3">
-                  <p className="text-tiny uppercase text-default-400">
+                <div className="rounded-xl bg-default/50 p-3">
+                  <p className="text-xs uppercase text-muted">
                     Additional Details
                   </p>
   
@@ -125,8 +124,8 @@ export default async function AppointmentsSection() {
                   </p>
                 </div>
               )}
-            </CardBody>
-          </Card>
+            </Card.Content>
+          </Card.Root>
         ))}
       </div>
     </section>

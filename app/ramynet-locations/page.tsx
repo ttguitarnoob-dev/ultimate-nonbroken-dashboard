@@ -1,11 +1,7 @@
 export const dynamic = "force-dynamic";
 
-import { Button } from "@heroui/button";
 // import RamyNetMap from "@/components/ramynet-map";
 import { GetRamyNetLocations } from "../lib/server-actions";
-import { Card, CardHeader, CardBody } from "@heroui/card";
-import { Image } from "@heroui/image";
-import { TrashIcon } from "@/components/icons";
 import RamyNetCard from "@/components/ramynet-card";
 
 export default async function RamyNetLocationsPage() {

@@ -1,8 +1,7 @@
 "use client";
 
 import { SetAvailabilitySlot } from "@/app/lib/server-actions";
-import { Button } from "@heroui/button";
-import { Link } from "@heroui/link";
+import { Button, Link } from "@heroui/react";
 import { useState } from "react";
 
 
@@ -61,9 +60,9 @@ export default function AvailabilityPage() {
   return (
 
     <div className="min-h-screen p-6 space-y-8">
-      <Button as={Link} href="/bubbles/dashboard" color="primary" radius="full">
+      <Link className="button button--secondary" href="/bubbles/dashboard">
         Back
-      </Button>
+      </Link>
 
       <form
 
@@ -123,7 +122,7 @@ export default function AvailabilityPage() {
 
         </div>
 
-        <Button type="submit" color="primary" radius="full">
+        <Button type="submit" variant="primary">
           Submit
         </Button>
 

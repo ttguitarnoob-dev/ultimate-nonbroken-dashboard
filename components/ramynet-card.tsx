@@ -1,9 +1,7 @@
 "use client"
 
-import { Button } from "@heroui/button";
-import { Card, CardHeader, CardBody, CardFooter } from "@heroui/card";
+import { Button, Card } from "@heroui/react";
 import { TrashIcon } from "./icons";
-import { Image } from "@heroui/image";
 import { DeleteRamyNetLocation } from "@/app/lib/server-actions";
 
 export default function RamyNetCard(location: any) {
@@ -16,11 +14,11 @@ export default function RamyNetCard(location: any) {
 
     return (
         <>
-            <Card
+            <Card.Root
                 key={location.id}
                 className="backdrop-blur-lg bg-black/20 dark:bg-white/10 transition-shadow"
             >
-                <CardHeader className="grid grid-cols-[40px_1fr_40px] items-center px-4 py-2 border-b border-gray-100">
+                <Card.Header className="grid grid-cols-[40px_1fr_40px] items-center px-4 py-2 border-b border-gray-100">
                     <div />
 
                     <h3 className="text-xl font-bold text-center break-words">
@@ -28,13 +26,13 @@ export default function RamyNetCard(location: any) {
                     </h3>
 
                     
-                </CardHeader>
+                </Card.Header>
 
-                <CardBody className="px-4 py-3 space-y-1 text-gray-700">
-                    <Image
+                <Card.Content className="px-4 py-3 space-y-1 text-gray-700">
+                    <img
                         src={location.location.imageURL ?? ""}
                         alt={location.location.imageURL ?? ""}
-                        className="w-full object-cover rounded"
+                        className="h-auto w-full rounded object-cover"
                     />
                     <div>
                         <span className="font-semibold">IP Address:</span> {location.location.ipAddress}
@@ -58,15 +56,18 @@ export default function RamyNetCard(location: any) {
                             }).format(new Date(location.location.createdAt))
                             : "N/A"}
                     </div>
-                    <CardFooter className="flex justify-center">
+                </Card.Content>
+                <Card.Footer className="flex justify-center">
                     <Button
                         isIconOnly
-                        startContent={<TrashIcon />}
+                        aria-label="Delete location"
+                        variant="danger"
                         onPress={() => handleDelete(location.location.id)}
-                    />
-                    </CardFooter>
-                </CardBody>
-            </Card>
+                    >
+                        <TrashIcon />
+                    </Button>
+                </Card.Footer>
+            </Card.Root>
         </>
     )
 }

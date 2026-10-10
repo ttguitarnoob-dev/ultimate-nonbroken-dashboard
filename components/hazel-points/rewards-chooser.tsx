@@ -2,15 +2,7 @@
 
 import { GetHazelRewards } from "@/app/lib/server-actions";
 import { HazelReward } from "@/types";
-import { Button } from "@heroui/button";
-import {
-    Modal,
-    ModalContent,
-    ModalHeader,
-    ModalBody,
-    ModalFooter,
-    useDisclosure,
-} from "@heroui/modal";
+import { Button, Modal, useOverlayState } from "@heroui/react";
 import { useState, useEffect } from "react";
 
 export default function HazelRewardsChooser() {
@@ -29,18 +21,21 @@ export default function HazelRewardsChooser() {
       console.log('Selected ID:', id);
     };
 
-    const { isOpen, onOpen, onOpenChange } = useDisclosure();
+    const overlay = useOverlayState();
 
     return (
         <>
-            <Button onPress={onOpen}>See Rewards!</Button>
-            <Modal scrollBehavior="inside" size="5xl" isOpen={isOpen} onOpenChange={onOpenChange}>
-                <ModalContent>
-                    {(onClose) => (
-                        <>
-                            <ModalHeader className="flex flex-col gap-1 text-4xl font-extrabold text-center text-green-600 mb-8 animate-bounce">Rewards!</ModalHeader>
-                            <ModalBody>
-                                <div className="min-h-screen bg-background p-8">
+            <Button onPress={overlay.open}>See Rewards!</Button>
+            <Modal>
+                <Modal.Backdrop isOpen={overlay.isOpen} onOpenChange={overlay.setOpen}>
+                    <Modal.Container>
+                        <Modal.Dialog className="max-h-[90vh] w-full max-w-5xl overflow-y-auto">
+                            <Modal.CloseTrigger />
+                            <Modal.Header>
+                                <Modal.Heading className="text-4xl font-extrabold text-center text-green-600 animate-bounce">Rewards!</Modal.Heading>
+                            </Modal.Header>
+                            <Modal.Body>
+                                <div className="bg-background p-4 sm:p-8">
                                     
                                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                                         {rewards.map((reward) => (
@@ -68,16 +63,16 @@ export default function HazelRewardsChooser() {
                                     </div>
                                 </div>
 
-                            </ModalBody>
-                            <ModalFooter>
-                                <Button color="danger" variant="light" onPress={onClose}>
+                            </Modal.Body>
+                            <Modal.Footer>
+                                <Button variant="danger" onPress={overlay.close}>
                                     Close
                                 </Button>
 
-                            </ModalFooter>
-                        </>
-                    )}
-                </ModalContent>
+                            </Modal.Footer>
+                        </Modal.Dialog>
+                    </Modal.Container>
+                </Modal.Backdrop>
             </Modal>
         </>
     );

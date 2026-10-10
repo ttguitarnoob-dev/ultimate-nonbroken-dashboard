@@ -1,5 +1,4 @@
-import { Button } from "@heroui/button";
-import { Link } from "@heroui/link";
+import NextLink from "next/link";
 
 interface DashboardButtonProps {
     label: string;
@@ -9,21 +8,13 @@ interface DashboardButtonProps {
 
 export default function DashboardButton({ label, url, isExternal }: DashboardButtonProps) {
     return (
-        <div>
-            {/* <Link
-        isExternal={isExternal}
-        href={url}
-      >
-        {label}
-      </Link> */}
-            <Button
-                as={Link}
-                href={url}
-                isExternal={isExternal}
-                className="w-full text-2xl p-10 text-secondary backdrop-blur-lg bg-black/20 dark:bg-white/10"
-            >
-                {label}
-            </Button>
-        </div>
+        <NextLink
+            href={url}
+            target={isExternal ? "_blank" : undefined}
+            rel={isExternal ? "noopener noreferrer" : undefined}
+            className="button button--primary w-full p-10 text-2xl text-accent backdrop-blur-lg bg-black/20 dark:bg-white/10"
+        >
+            {label}
+        </NextLink>
     );
 }

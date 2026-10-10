@@ -1,10 +1,7 @@
 "use client";
 
 import { downloadHazelTube, getHazelTube, removeFromHazelTube } from "@/app/lib/server-actions";
-import { Button } from "@heroui/button";
-import { Card, CardBody } from "@heroui/card";
-import { Divider } from "@heroui/divider";
-import { Image } from "@heroui/image";
+import { Button, Card, Separator } from "@heroui/react";
 import { useEffect, useState } from "react";
 
 type VideoData = {
@@ -111,15 +108,13 @@ export default function VideoQueuePlaylist() {
       <div className="flex flex-col gap-4 w-full max-w-4xl mb-10">
         <h2 className="text-5xl">Audios</h2>
         {audios.map((video) => (
-          <Card className="backdrop-blur-lg bg-black/20 dark:bg-white/5" key={video.videoId}>
-            <CardBody className="flex flex-col gap-4">
+          <Card.Root className="backdrop-blur-lg bg-black/20 dark:bg-white/5" key={video.videoId}>
+            <Card.Content className="flex flex-col gap-4">
               {/* Thumbnail at the top */}
-              <Image
+              <img
                 src={video.thumbnail}
                 alt={video.title}
-                width={500}
-                radius="sm"
-                className="self-center" // optional: center the image horizontally
+                className="h-auto max-h-80 w-full object-contain"
               />
 
               {/* Content stacked vertically */}
@@ -130,34 +125,31 @@ export default function VideoQueuePlaylist() {
                 {/* Buttons stay horizontal at the bottom */}
                 <div className="flex gap-2 justify-end mt-auto">
                   <Button
-                    color="primary"
-                    variant="flat"
+                    variant="secondary"
                     onPress={() => openVideo(video.videoId)}
                   >
                     Open on YouTube
                   </Button>
 
                   <Button
-                    color="success"
-                    variant="flat"
+                    variant="primary"
                     onPress={() => callHazelTubeDownload(video.videoId, true)}
                   >
                     Approve
                   </Button>
 
                   <Button
-                    color="danger"
-                    variant="flat"
+                    variant="danger"
                     onPress={() => handleRemove(video.videoId, true)}
                   >
                     Deny
                   </Button>
                 </div>
               </div>
-            </CardBody>
-          </Card>
+            </Card.Content>
+          </Card.Root>
         ))}
-      <Divider className="mb-10" />
+      <Separator className="mb-10" />
       </div>
   
 )}
@@ -166,15 +158,13 @@ export default function VideoQueuePlaylist() {
       <div className="flex flex-col gap-4 w-full max-w-4xl">
         <h2 className="text-5xl">Videos</h2>
         {videos.map((video) => (
-          <Card className="backdrop-blur-lg bg-black/20 dark:bg-white/5" key={video.videoId}>
-            <CardBody className="flex flex-col gap-4">
+          <Card.Root className="backdrop-blur-lg bg-black/20 dark:bg-white/5" key={video.videoId}>
+            <Card.Content className="flex flex-col gap-4">
               {/* Thumbnail at the top */}
-              <Image
+              <img
                 src={video.thumbnail}
                 alt={video.title}
-                width={500}
-                radius="sm"
-                className="self-center" // optional: center the image horizontally
+                className="h-auto max-h-80 w-full object-contain"
               />
 
               {/* Content stacked vertically */}
@@ -185,32 +175,29 @@ export default function VideoQueuePlaylist() {
                 {/* Buttons stay horizontal at the bottom */}
                 <div className="flex gap-2 justify-end mt-auto">
                   <Button
-                    color="primary"
-                    variant="flat"
+                    variant="secondary"
                     onPress={() => openVideo(video.videoId)}
                   >
                     Open on YouTube
                   </Button>
 
                   <Button
-                    color="success"
-                    variant="flat"
+                    variant="primary"
                     onPress={() => callHazelTubeDownload(video.videoId, false)}
                   >
                     Approve
                   </Button>
 
                   <Button
-                    color="danger"
-                    variant="flat"
+                    variant="danger"
                     onPress={() => handleRemove(video.videoId, false)}
                   >
                     Deny
                   </Button>
                 </div>
               </div>
-            </CardBody>
-          </Card>
+            </Card.Content>
+          </Card.Root>
         ))}
       </div>
   

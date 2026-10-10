@@ -2,11 +2,7 @@
 
 import { useState } from "react";
 import { addToHazelTube, logHazelSearch } from "../lib/server-actions";
-import { Input } from "@heroui/input";
-import { Button } from "@heroui/button";
-import { Card, CardBody } from "@heroui/card";
-import { Image } from "@heroui/image";
-import { Switch } from "@heroui/switch";
+import { Button, Card, Input, Label, Switch, TextField } from "@heroui/react";
 import { inappropriateSearchTerms } from "../lib/helpers";
 
 type VideoResult = {
@@ -147,24 +143,30 @@ export default function YouTubeSearchAddQueue() {
       <p>Search for a video. Switch the Audio Only switch if you want to only download the audio.</p>
       {/* Search input */}
       <div className="flex justify-center flex-col md:flex-row gap-2 w-full max-w-7xl">
-        <Input
-          label="Search YouTube"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && searchYouTube()}
-          className="flex-1 min-w-0"
-        />
+        <TextField className="flex-1 min-w-0">
+          <Label>Search YouTube</Label>
+          <Input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && searchYouTube()}
+          />
+        </TextField>
         <Button
           onPress={searchYouTube}
-          isLoading={loading}
-          color="primary"
+          isPending={loading}
+          variant="primary"
           className="h-[56px]" // Match Input height (adjust if Input height differs)
         >
           Search
         </Button>
-        <Switch isSelected={isAudio} onValueChange={setIsAudio}>
-          Audio Only
-        </Switch>
+        <Switch.Root isSelected={isAudio} onChange={setIsAudio}>
+          <Switch.Content>
+            <Switch.Control>
+              <Switch.Thumb />
+            </Switch.Control>
+            Audio Only
+          </Switch.Content>
+        </Switch.Root>
       </div>
 
       <div>
@@ -174,15 +176,13 @@ export default function YouTubeSearchAddQueue() {
       {/* Results */}
       <div className="flex flex-col gap-6">
         {results.map((video) => (
-          <Card key={video.videoId}>
-            <CardBody className="flex flex-row gap-4">
+          <Card.Root key={video.videoId}>
+            <Card.Content className="flex flex-row gap-4">
               <div className="relative w-[300px]">
-                <Image
+                <img
                   src={video.thumbnail}
                   alt={video.title}
-                  width={300}
-                  radius="sm"
-                  className="object-cover"
+                  className="h-auto w-full rounded object-cover"
                 />
 
                 {/* Duration Overlay */}
@@ -200,30 +200,29 @@ export default function YouTubeSearchAddQueue() {
                     {decodeHtml(video.title)}
                   </p>
 
-                  <p className="text-sm text-default-600">
+                  <p className="text-sm text-muted">
                     {video.channel}
                   </p>
 
-                  <p className="text-xs text-default-400">
+                  <p className="text-xs text-muted">
                     {video.uploadDate}
                   </p>
                 </div>
 
                 {/* Button */}
                 <Button
-                  color="success"
-                  variant="flat"
+                  variant="primary"
                   className="max-w-xs mx-auto mt-4"
                   onPress={() => handleAdd(video.videoId, isAudio)}
-                  isLoading={addingId === video.videoId}
+                  isPending={addingId === video.videoId}
                 >
                   {isAudio ? "Request This Audio" : "Request This Video"}
                 </Button>
 
               </div>
 
-            </CardBody>
-          </Card>
+            </Card.Content>
+          </Card.Root>
         ))}
       </div>
     </div>

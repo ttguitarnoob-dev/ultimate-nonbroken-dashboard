@@ -1,15 +1,6 @@
 "use client"
 
-import { Image } from "@heroui/image";
-import { Link } from "@heroui/link";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
-} from "@heroui/table";
+import { Link, Table } from "@heroui/react";
 
 type Item = {
   id: string | number;
@@ -28,40 +19,40 @@ const columns = [
 
 export default function CarryList({ items }: { items: Item[] }) {
   return (
-    <Table isStriped aria-label="Items table">
-      <TableHeader columns={columns}>
-        {(column) => <TableColumn key={column.uid}>{column.name}</TableColumn>}
-      </TableHeader>
-      <TableBody items={items}>
-        {(row) => (
-          <TableRow key={row.id}>
-            {(columnKey) => {
-              // Special handling for the image column
-              if (columnKey === "imageURL") {
-                return (
-                  <TableCell>
-                    {row.imageURL ? (
-                      <Link href={`/carry-list/${row.id}`} >
-                        <Image
-                          src={row.imageURL}
-                          alt={row.item}
-                          className="w-12 h-12 object-cover rounded"
-                        />
-                      </Link>
-
-                    ) : (
-                      "—"
-                    )}
-                  </TableCell>
-                );
-              }
-
-              const value = row[columnKey as keyof Item];
-              return <TableCell>{String(value)}</TableCell>;
-            }}
-          </TableRow>
-        )}
-      </TableBody>
+    <Table>
+      <Table.ScrollContainer>
+        <Table.Content aria-label="Items table" className="min-w-[640px]">
+          <Table.Header>
+            {columns.map((column) => (
+              <Table.Column key={column.uid} isRowHeader={column.uid === "name"}>
+                {column.name}
+              </Table.Column>
+            ))}
+          </Table.Header>
+          <Table.Body>
+            {items.map((row) => (
+              <Table.Row key={row.id} id={String(row.id)}>
+                <Table.Cell>{row.name}</Table.Cell>
+                <Table.Cell>{row.item}</Table.Cell>
+                <Table.Cell>
+                  {row.imageURL ? (
+                    <Link href={`/carry-list/${row.id}`} aria-label={`View ${row.item}`}>
+                      <img
+                        src={row.imageURL}
+                        alt={row.item}
+                        className="h-12 w-12 rounded object-cover"
+                      />
+                    </Link>
+                  ) : (
+                    "-"
+                  )}
+                </Table.Cell>
+                <Table.Cell>{new Date(row.createdAt).toLocaleDateString()}</Table.Cell>
+              </Table.Row>
+            ))}
+          </Table.Body>
+        </Table.Content>
+      </Table.ScrollContainer>
     </Table>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Card, CardBody, CardHeader } from "@heroui/card";
+import { Card } from "@heroui/react";
 
 type RamyNetLocation = {
   id: number;
@@ -78,12 +78,12 @@ export default function RamyNetMap({
 
       {selectedLocation && (
         <div className="absolute bottom-6 left-6 w-[350px]">
-          <Card className="shadow-xl">
-            <CardHeader className="font-semibold text-lg">
+          <Card.Root className="shadow-xl">
+            <Card.Header className="font-semibold text-lg">
               {selectedLocation.locationName}
-            </CardHeader>
+            </Card.Header>
 
-            <CardBody className="space-y-2 text-sm">
+            <Card.Content className="space-y-2 text-sm">
               <div>
                 <strong>IP:</strong> {selectedLocation.ipAddress}
               </div>
@@ -108,8 +108,8 @@ export default function RamyNetMap({
                   dateStyle: "short",
                 }).format(new Date(selectedLocation.createdAt))}
               </div>
-            </CardBody>
-          </Card>
+            </Card.Content>
+          </Card.Root>
         </div>
       )}
     </div>

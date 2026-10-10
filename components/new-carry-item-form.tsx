@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import { createCarryItem } from "@/app/lib/server-actions";
-import { Button } from "@heroui/button";
-import { Input } from "@heroui/input";
+import { Button, Input, Label, TextField } from "@heroui/react";
 
 export default function NewCarryItemForm() {
   const [name, setName] = useState("");
@@ -52,31 +51,31 @@ export default function NewCarryItemForm() {
 
   return (
     <section className="flex flex-col gap-4 max-w-sm">
-      <Input
-        label="Your Name"
-        type="text"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
-      <Input
-        label="Item Carried"
-        type="text"
-        value={item}
-        onChange={(e) => setItem(e.target.value)}
-      />
-      <Input
-        label="Add Image As Proof"
-        type="file"
-        onChange={(e) => {
-          if (e.target.files && e.target.files[0]) {
-            setFile(e.target.files[0]);
-          } else {
-            setFile(null);
-          }
-        }}
-      />
+      <TextField>
+        <Label>Your Name</Label>
+        <Input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+      </TextField>
+      <TextField>
+        <Label>Item Carried</Label>
+        <Input
+          type="text"
+          value={item}
+          onChange={(e) => setItem(e.target.value)}
+        />
+      </TextField>
+      <TextField>
+        <Label>Add Image As Proof</Label>
+        <Input
+          type="file"
+          onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+        />
+      </TextField>
       
-      <Button onPress={handleSubmit} isLoading={isLoading} disabled={!name || !item}>
+      <Button onPress={handleSubmit} isPending={isLoading} isDisabled={!name || !item}>
         Submit
       </Button>
     </section>

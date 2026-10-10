@@ -3,8 +3,7 @@ export const dynamic = "force-dynamic";
 import AppointmentsSection from "@/components/bubbles-appointments-section";
 import InquiriesSection from "@/components/bubbles-inquiries-section";
 import { title } from "@/components/primitives";
-import { Button } from "@heroui/button";
-import { Link } from "@heroui/link";
+import { Link } from "@heroui/react";
 import { Suspense } from "react";
 
 export default function DashboardPage() {
@@ -22,15 +21,12 @@ export default function DashboardPage() {
                     
                 </div>
 
-                <Button
-                    radius="full"
-                    color="secondary"
-                    size="lg"
-                    as={Link}
+                <Link
+                    className="button button--secondary"
                     href="/bubbles/availability"
                 >
                     Set Availability
-                </Button>
+                </Link>
             </div>
 
             {/* Sections */}

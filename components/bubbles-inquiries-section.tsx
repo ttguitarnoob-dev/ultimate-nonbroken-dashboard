@@ -1,7 +1,6 @@
 import { GetBubblesInquiries } from "@/app/lib/server-actions";
 
-import { Card, CardHeader, CardBody } from "@heroui/card";
-import { Divider } from "@heroui/divider";
+import { Card, Separator } from "@heroui/react";
 
 export default async function InquiriesSection() {
   const inquiries = await GetBubblesInquiries();
@@ -13,47 +12,47 @@ export default async function InquiriesSection() {
           Inquiries
         </h2>
   
-        <p className="text-sm text-default-500">
+        <p className="text-sm text-muted">
           Customer questions, requests, and incoming messages.
         </p>
       </div>
   
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 2xl:grid-cols-3">
         {inquiries.map((item) => (
-          <Card
+          <Card.Root
             key={item.id}
-            className="shadow-md backdrop-blur-lg bg-primary/20 dark:bg-white/10"
+            className="shadow-md backdrop-blur-lg bg-accent/20 dark:bg-white/10"
           >
-            <CardHeader className="flex items-start justify-between gap-4">
+            <Card.Header className="flex items-start justify-between gap-4">
               <div className="flex flex-col">
                 <p className="text-lg font-semibold">
                   Human: {item.ownerName}
                 </p>
   
-                <p className="text-small text-default-500">
+                <p className="text-sm text-muted">
                   {item.email}
                 </p>
               </div>
   
               <div className="text-right shrink-0">
-                <p className="text-small font-medium">
+                <p className="text-sm font-medium">
                   Dog: {item.dogName}
                 </p>
   
-                <p className="text-tiny text-default-400">
+                <p className="text-xs text-muted">
                   {new Date(item.createdAt).toLocaleDateString()}
                 </p>
               </div>
-            </CardHeader>
+            </Card.Header>
   
-            <Divider />
+            <Separator />
   
-            <CardBody className="pt-4">
-              <p className="text-sm leading-relaxed text-default-700 whitespace-pre-wrap">
+            <Card.Content className="pt-4">
+              <p className="text-sm leading-relaxed text-foreground whitespace-pre-wrap">
                 {item.inquiry}
               </p>
-            </CardBody>
-          </Card>
+            </Card.Content>
+          </Card.Root>
         ))}
       </div>
     </section>
