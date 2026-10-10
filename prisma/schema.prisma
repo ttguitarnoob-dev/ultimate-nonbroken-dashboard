@@ -133,6 +133,13 @@ model HazelRewards {
   purchaseRequsts PurchaseRequst[]
 }
 
+model HazelPointsChange {
+  id        Int      @id @default(autoincrement())
+  amount    Int
+  reason    String
+  createdAt DateTime @default(now())
+}
+
 model PurchaseRequst {
   id             Int          @id @default(autoincrement())
   item           HazelRewards @relation(fields: [hazelRewardsId], references: [id])
