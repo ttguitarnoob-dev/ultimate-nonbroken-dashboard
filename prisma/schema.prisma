@@ -134,10 +134,11 @@ model HazelRewards {
 }
 
 model HazelPointsChange {
-  id        Int      @id @default(autoincrement())
-  amount    Int
-  reason    String
-  createdAt DateTime @default(now())
+  id         Int      @id @default(autoincrement())
+  amount     Int
+  reason     String
+  isAddition Boolean
+  createdAt  DateTime @default(now())
 }
 
 model PurchaseRequst {

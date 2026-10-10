@@ -49,3 +49,8 @@ export type HazelReward = {
 }
 
 export type CreateHazelRewardData = Omit<HazelReward, "id">;
+
+export interface LogItem {
+  timestamp: string | Date;
+  message: string;
+}

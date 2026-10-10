@@ -1,5 +1,5 @@
 "use server"
-import { BubblesAppointment, BubblesInquiry, CreateHazelRewardData, HazelReward } from "@/types";
+import { BubblesAppointment, BubblesInquiry, CreateHazelRewardData, HazelReward, LogItem } from "@/types";
 import { prisma } from "./db";
 
 //CREATE CARRY ITEM
@@ -401,5 +401,29 @@ export async function CreateHazelReward(item: CreateHazelRewardData) {
   } catch (error) {
     console.error("Failed to create reward:", error);
     throw new Error("Unable to create reward.");
+  }
+}
+
+// Fetch Hazel Points Change History
+export async function getHazelPointsChangeLogs(): Promise<LogItem[]> {
+  try {
+    const twoWeeksAgo = new Date();
+    twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 14);
+
+    const changes = await prisma.hazelPointsChange.findMany({
+      where: {
+        createdAt: {
+          gte: twoWeeksAgo,
+        },
+      },
+    });
+
+    return changes.map((change) => ({
+      timestamp: change.createdAt,
+      message: `Hazel ${change.isAddition ? 'gained' : 'lost'} ${change.amount} points for ${change.reason}`,
+    }));
+  } catch (error) {
+    console.error('Failed to fetch Hazel points change logs:', error);
+    throw new Error('Unable to retrieve points change logs.');
   }
 }

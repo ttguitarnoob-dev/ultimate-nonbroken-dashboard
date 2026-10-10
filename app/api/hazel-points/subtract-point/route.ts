@@ -23,6 +23,7 @@ export async function POST(request: Request) {
     const newChangeMessage = await prisma.hazelPointsChange.create({
     data: {
       amount: pointsAmount,
+      isAddition: false,
       reason: reason || 'Subtracted points',
     },
   });
