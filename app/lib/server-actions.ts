@@ -427,3 +427,72 @@ export async function getHazelPointsChangeLogs(): Promise<LogItem[]> {
     throw new Error('Unable to retrieve points change logs.');
   }
 }
+
+// Purchase Hazel Reward
+export async function purchaseHazelReward(id: number) {
+  try {
+    return await prisma.$transaction(async (prisma) => {
+      const reward = await prisma.hazelRewards.findUnique({
+        where: { id },
+      });
+
+      if (!reward) {
+        throw new Error('Reward not found');
+      }
+
+      const points = await prisma.hazelPoint.findUnique({
+        where: { id: 1 },
+      });
+
+      if (!points || points.points < reward.cost) {
+        throw new Error('Insufficient points');
+      }
+
+      await prisma.hazelPoint.update({
+        where: { id: 1 },
+        data: { points: { decrement: reward.cost } },
+      });
+
+      const request = await prisma.purchaseRequst.create({
+        data: {
+          hazelRewardsId: id,
+          approved: false,
+        },
+      });
+
+      return request;
+    });
+  } catch (error) {
+    console.error('Failed to purchase reward:', error);
+    throw new Error('Unable to complete purchase');
+  }
+}
+
+// Fetch all purchase requests
+export async function getPurchaseRequests() {
+  try {
+    const requests = await prisma.purchaseRequst.findMany({
+      include: {
+        item: true,
+      },
+    });
+    return requests;
+  } catch (error) {
+    console.error('Failed to fetch purchase requests:', error);
+    throw new Error('Unable to fetch purchase requests');
+  }
+}
+
+// Approve purchase request
+export async function approvePurchaseRequest(id: number) {
+  try {
+    const request = await prisma.purchaseRequst.update({
+      where: { id },
+      data: { approved: true },
+    });
+    return request;
+  } catch (error) {
+    console.error('Failed to approve purchase request:', error);
+    throw new Error('Unable to approve purchase request');
+  }
+}

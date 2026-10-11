@@ -9,12 +9,16 @@ interface ConsoleListProps {
 
 export const FunConsoleList: React.FC<ConsoleListProps> = ({ logs }) => {
   const formatDate = (dateInput: string | Date) => {
-    const date = new Date(dateInput);
-    const mm = String(date.getMonth() + 1).padStart(2, '0');
-    const dd = String(date.getDate()).padStart(2, '0');
-    const yyyy = date.getFullYear();
-    return `${mm}/${dd}/${yyyy}`;
-  };
+  const date = new Date(dateInput);
+  return date.toLocaleString('en-US', {
+    month: '2-digit',
+    day: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true
+  });
+};
 
   return (
     <div className="max-w-md mx-auto bg-slate-900 rounded-xl shadow-2xl overflow-hidden border border-slate-700 font-mono">
@@ -28,7 +32,7 @@ export const FunConsoleList: React.FC<ConsoleListProps> = ({ logs }) => {
         {logs.map((log, index) => (
           <div
             key={index}
-            className="flex items-start gap-3 p-2 rounded hover:bg-slate-800/50 transition-colors group"
+            className="flex text-left items-start gap-3 p-2 rounded hover:bg-slate-800/50 transition-colors group"
           >
             <span className="text-xs text-emerald-400 font-bold whitespace-nowrap mt-0.5">
               [{formatDate(log.timestamp)}]

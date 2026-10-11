@@ -1,6 +1,6 @@
 "use client"
 
-import { GetHazelRewards } from "@/app/lib/server-actions";
+import { GetHazelRewards, purchaseHazelReward } from "@/app/lib/server-actions";
 import { HazelReward } from "@/types";
 import { Button, Modal, useOverlayState } from "@heroui/react";
 import { useState, useEffect } from "react";
@@ -17,8 +17,9 @@ export default function HazelRewardsChooser() {
       fetchRewards();
     }, []);
   
-    const handlePurchase = (id: number) => {
+    const handlePurchase = async (id: number) => {
       console.log('Selected ID:', id);
+      const result = await purchaseHazelReward(id);
     };
 
     const overlay = useOverlayState();
